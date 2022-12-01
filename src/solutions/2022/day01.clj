@@ -7,17 +7,16 @@
                 (str/split-lines)
                 (partition-by str/blank?)
                 (remove #(str/blank? (first %)))
-                (map (fn [calories]
-                       (apply + (map #(Integer/parseInt %) calories))))
-                sort))
+                (map #(transduce (map parse-long) + 0 %))
+                (sort >)))
 
 (defn part-1
   [input]
-  (last input))
+  (first input))
 
 (defn part-2
   [input]
-  (apply + (take-last 3 input)))
+  (transduce (take 3) + 0 input))
 
 (deftest test-answers
   (t/is (= 70296 (part-1 input)))
