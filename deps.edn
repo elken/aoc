@@ -1,7 +1,0 @@
-{:paths ["solutions" "api"]
- :deps {org.clojure/clojure {:mvn/version "1.11.1"}}
- :aliases {:api {:ns-default api
-                 :extra-paths ["api" "solutions"]
-                 :extra-deps {babashka/fs {:mvn/version "0.1.11"}
-                              org.clojure/tools.cli {:mvn/version "1.0.206"}
-                              http-kit/http-kit {:mvn/version "2.6.0"}}}}}

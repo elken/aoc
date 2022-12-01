@@ -1,8 +1,8 @@
-(ns aoc.YEAR.dayDAY
+(ns solutions.YEAR.dayDAY
     (:require [clojure.java.io :as io]
               [clojure.string :as str]))
 
-(def input (->> (slurp (io/resource "inputs/dayDAY.txt"))
+(def input (->> (slurp (io/resource "inputs/YEAR/dayDAY.txt"))
                 (str/split-lines)))
 
 (defn part-1

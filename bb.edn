@@ -1,4 +1,4 @@
-{:paths ["solutions" "resources"]
+{:paths ["src" "resources"]
  :deps {io.github.cognitect-labs/test-runner
         {:git/tag "v0.5.0" :git/sha "b3fd0d2"}
         org.clojure/tools.namespace {:git/url "https://github.com/babashka/tools.namespace"
@@ -11,14 +11,14 @@
          -load-template {:task (slurp (io/resource "template.clj"))}
          -parse-day-args {:task (let [now (new java.util.Date)
                                       year (.format (java.text.SimpleDateFormat. "yyyy") now)
-                                      day (.format (java.text.SimpleDateFormat. "dd") now)]
+                                      day (.format (java.text.SimpleDateFormat. "d") now)]
                                   (condp = (count *command-line-args*)
                                     1 [(first *command-line-args*) year]
                                     2 [(first *command-line-args*) (second *command-line-args*)]
                                     [day year]))}
          -download-input {:task (let [[day year] (run '-parse-day-args)
                                       path (fs/path (run '-input-dir) year)
-                                      file-name (format "day%s.txt" day)
+                                      file-name (format "day%02d.txt" (Integer/parseInt day))
                                       url (format "https://adventofcode.com/%s/day/%s/input" year day)
                                       resp (curl/get url {:headers {"Cookie" (str "session=" (System/getenv "AOC_TOKEN"))}})]
                                   (when-not (fs/exists? path)
@@ -31,6 +31,7 @@
                               template (run '-load-template)
                               path (fs/path "solutions" year)
                               file-name (format "day%s.clj" day)]
+                          (print (format "Creating template for %s/%s" day year))
 
                           ;; Create the year path if missing
                           (when-not (fs/exists? path)
@@ -41,6 +42,10 @@
                            (-> template
                                (str/replace (re-pattern "YEAR") year)
                                (str/replace (re-pattern "DAY") day))))}
-         test {:doc "Run tests"
-               :requires ([cognitect.test-runner :as tr])
-               :task (apply tr/-main *command-line-args*)}}}
+         test {:extra-paths ["test"]
+               :extra-deps {io.github.cognitect-labs/test-runner
+                            {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+               :task (exec 'cognitect.test-runner.api/test)
+               :exec-args {:dirs ["src"] :patterns ["solutions.*"]}
+               :org.babashka/cli {:coerce {:nses [:symbol]
+                                           :vars [:symbol]}}}}}

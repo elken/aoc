@@ -1,0 +1,23 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ConorMacBride/install-package@v1
+        with:
+          apt: openjdk-11-jdk-headless
+
+      - name: Install bb
+        run: bash < <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)
+
+      - name: Run tests
+        run: bb test
