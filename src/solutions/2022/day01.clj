@@ -5,11 +5,10 @@
 
 (def input (->> (slurp (io/resource "inputs/2022/day01.txt"))
                 (str/split-lines)
-                (partition-by #(= "" %))
-                (remove #(= "" (first %)))
+                (partition-by str/blank?)
+                (remove #(str/blank? (first %)))
                 (map (fn [calories]
-                       (reduce (fn [acc n]
-                                 (+ acc (Integer/parseInt n))) 0 calories)))
+                       (apply + (map #(Integer/parseInt %) calories))))
                 sort))
 
 (defn part-1
@@ -18,7 +17,7 @@
 
 (defn part-2
   [input]
-  (reduce + (take-last 3 input)))
+  (apply + (take-last 3 input)))
 
 (deftest test-answers
   (t/is (= 70296 (part-1 input)))
