@@ -29,7 +29,7 @@
                   :task (let [[day year] (run '-parse-day-args)
                               day (format "%02d" (Integer/parseInt day))
                               template (run '-load-template)
-                              path (fs/path "solutions" year)
+                              path (fs/path "src" "solutions" year)
                               file-name (format "day%s.clj" day)]
                           (print (format "Creating template for %s/%s" day year))
 
