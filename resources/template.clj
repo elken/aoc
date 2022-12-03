@@ -1,5 +1,6 @@
 (ns solutions.YEAR.dayDAY
     (:require [clojure.java.io :as io]
+              [clojure.test :as t :refer [deftest]]
               [clojure.string :as str]))
 
 (def input (->> (slurp (io/resource "inputs/YEAR/dayDAY.txt"))
