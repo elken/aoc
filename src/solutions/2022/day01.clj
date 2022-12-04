@@ -1,4 +1,4 @@
-;; # 2022 - Day 1
+;; # 2022 - Day 01
 ;;
 ;; ## Problem
 ;; ### Part 1
@@ -94,6 +94,7 @@
 
 ;; ## Solution
 ;; Ok, so this looks quite simple; sum all the "groups" of elves.
+;;
 ;; First things first, let's load our input and parse it
 
 (def input (->> (slurp (io/resource "inputs/2022/day01.txt")) ;; Load the resource
