@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="overflow-hidden min-h-screen"><head><title>2022 - Day 1</title><meta charset="UTF-8"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Santa&apos;s reindeer typically eat regular reindeer food, but they need a lot ofmagical energy to deliver presents on Christmas. For that, their favoritesnack is a special type of star fruit that only grows deep in the jungle. TheElves have brought you on their annual expedition to the grove where thefruit grows." property="og:description"><meta content="2022 - Day 1" property="og:title"><meta content="article:clerk" property="og:type"><meta content="summary_large_image" name="twitter:card"><script src="https://cdn.tailwindcss.com?plugins=typography" type="text/javascript"></script><script>tailwind.config = {
+  darkMode: "class",
+  content: ["./tw/viewer.js", "./tw/**/*.edn"],
+  safelist: ['dark'],
+  theme: {
+    extend: {},
+    fontFamily: {
+      sans: ["Fira Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+      serif: ["PT Serif", "serif"],
+      mono: ["Fira Mono", "monospace"]
+    }
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+</script><style type="text/tailwindcss">@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 18px;
+  }
+  @media (max-width: 600px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  .font-condensed { font-family: "Fira Sans Condensed", sans-serif; }
+  .font-inter     { font-family: "Inter", sans-serif; }
+  body {
+    @apply font-serif antialiased text-gray-900 sm:overscroll-y-none;
+  }
+  code, .code {
+    @apply font-mono text-sm text-gray-900 bg-slate-50 px-0.5 py-px rounded dark:bg-gray-800;
+  }
+  code::before, code::after { @apply content-none !important; }
+  h1, h3, h4, h5, h6 {
+    @apply font-condensed font-bold mt-8 first:mt-0;
+  }
+  h2 {
+    /*We cannot collapse margins due to nesting but we want to*/
+    /*keep the h2’s large margin visible*/
+    @apply font-condensed font-bold mt-8 first:mt-2;
+  }
+  h1 { @apply text-4xl; }
+  h2 { @apply text-3xl; }
+  h3 { @apply text-2xl; }
+
+  button { @apply focus:outline-none; }
+  strong { @apply font-bold; }
+  em     { @apply italic; }
+  pre    { @apply m-0 font-mono; }
+}
+
+/* Compatibility */
+/* --------------------------------------------------------------- */
+/* TODO: Verify which colors are in use and replace with Tailwind
+   colors accordingly. Move Nj-specific styles out of here. */
+
+:root {
+  --teal-color: #31afd0;
+  --dark-teal-color: #095960;
+  --near-black-color: #2e2e2c;
+  --red-color: #d64242;
+  --dark-blue-color: #1f2937;
+  --dark-blue-60-color: rgba(28, 42, 56, 0.6);
+  --gray-panel-color: rgba(239, 241, 245, 1.000);
+  --brand-color: var(--dark-blue-color);
+  --link-color: #5046e4;
+  --command-bar-selected-color: var(--teal-color);
+}
+
+.serif      { @apply font-serif; }
+.sans-serif { @apply font-sans; }
+.monospace  { @apply font-mono; }
+.inter      { @apply font-inter; }
+
+.border-color-teal { border-color: var(--dark-teal-color); }
+.teal { color: var(--teal-color); }
+.bg-dark-blue { background: var(--dark-blue-color); }
+.bg-dark-blue-60 { background: rgba(28, 42, 56, 0.6); }
+.bg-gray-panel { background: var(--gray-panel-color); }
+.text-dark-blue  { color: var(--dark-blue-color); }
+.text-dark-blue-60 { color: var(--dark-blue-60-color); }
+.border-dark-blue-30 { border-color: rgba(28, 42, 56, 0.6); }
+.text-brand { color: var(--dark-blue-color); }
+.bg-brand { background: var(--dark-blue-color); }
+.text-selected { color: white; }
+.red { color: var(--red-color); }
+
+/* Disclose Button */
+/* --------------------------------------------------------------- */
+
+.disclose {
+  @apply content-none border-solid cursor-pointer inline-block relative mr-[3px] top-[-2px] transition-all;
+  border-color: var(--near-black-color) transparent;
+  border-width: 6px 4px 0;
+}
+.disclose:hover {
+  border-color: var(--near-black-color) transparent;
+}
+.dark .disclose,
+.dark .disclose:hover {
+  border-color: white transparent;
+}
+.disclose.collapsed {
+  @apply rotate-[-90deg];
+}
+
+/* Layout */
+/* --------------------------------------------------------------- */
+
+.page {
+  @apply max-w-5xl mx-auto px-12 box-border flex-shrink-0;
+}
+.max-w-prose { @apply max-w-[46rem] !important; }
+.max-w-wide  { @apply max-w-3xl !important; }
+
+/* List Styles */
+/* --------------------------------------------------------------- */
+
+.task-list-item + .task-list-item,
+.viewer-markdown ul ul {
+  @apply mt-1 mb-0;
+}
+
+/* compact TOC */
+.viewer-markdown .toc ul {
+  list-style: none;
+  @apply my-1;
+}
+
+/* Code Viewer */
+/* --------------------------------------------------------------- */
+
+.viewer-code {
+  @apply font-mono bg-slate-100 rounded-sm text-sm overflow-x-auto dark:bg-gray-800;
+}
+.viewer-code .cm-content {
+  @apply py-4 px-8;
+}
+@media (min-width: 960px){
+  .viewer-notebook .viewer-code .cm-content {
+    @apply py-4 pl-12;
+  }
+}
+/* Don’t show focus outline when double-clicking cell in Safari */
+.cm-scroller { @apply focus:outline-none; }
+
+/* Syntax Highlighting */
+/* --------------------------------------------------------------- */
+
+.inspected-value { @apply text-xs font-mono leading-[1.25rem]; }
+.cmt-strong, .cmt-heading { @apply font-bold; }
+.cmt-italic, .cmt-emphasis { @apply italic; }
+.cmt-strikethrough { @apply line-through; }
+.cmt-link { @apply underline; }
+.untyped-value { @apply whitespace-nowrap; }
+
+.cm-editor, .cmt-default, .viewer-result {
+  @apply text-slate-800 dark:text-slate-300;
+}
+.cmt-keyword {
+  @apply text-purple-800 dark:text-pink-400;
+}
+.cmt-atom, .cmt-bool, .cmt-url, .cmt-contentSeparator, .cmt-labelName {
+  @apply text-blue-900 dark:text-blue-300;
+}
+.cmt-inserted, .cmt-literal {
+  @apply text-emerald-700 dark:text-emerald-200;
+}
+.cmt-string, .cmt-deleted {
+  @apply text-rose-700 dark:text-sky-300;
+}
+.cmt-italic.cmt-string {
+  @apply dark:text-sky-200;
+}
+.cmt-regexp, .cmt-escape {
+  @apply text-orange-500 dark:text-orange-300;
+}
+.cmt-variableName {
+  @apply text-blue-800 dark:text-sky-300;
+}
+.cmt-typeName, .cmt-namespace {
+  @apply text-emerald-600 dark:text-emerald-300;
+}
+.cmt-className {
+  @apply text-teal-600 dark:text-teal-200;
+}
+.cmt-macroName {
+  @apply text-teal-700 dark:text-teal-200;
+}
+.cmt-propertyName {
+  @apply text-blue-700 dark:text-blue-200;
+}
+.cmt-comment {
+  @apply text-slate-500 dark:text-slate-400;
+}
+.cmt-meta {
+  @apply text-slate-600 dark:text-slate-400;
+}
+.cmt-invalid {
+  @apply text-red-500 dark:text-red-300;
+}
+
+.result-data {
+  @apply font-mono text-sm overflow-x-auto whitespace-nowrap leading-normal;
+}
+.result-data::-webkit-scrollbar, .path-nav::-webkit-scrollbar {
+  @apply h-0;
+}
+.result-data-collapsed {
+  @apply whitespace-nowrap;
+}
+.result-data-field {
+  @apply ml-4 whitespace-nowrap;
+}
+.result-data-field-link{
+  @apply ml-4 whitespace-nowrap cursor-pointer;
+}
+.result-data-field-link:hover {
+  @apply text-black bg-black/5;
+}
+.result-text-empty {
+  color: rgba(0,0,0,.3);
+}
+.browsify-button:hover {
+  box-shadow: -2px 0 0 2px #edf2f7;
+}
+
+/* Prose */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook,
+.viewer-markdown {
+  @apply prose
+    dark:prose-invert
+    prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+    dark:prose-a:text-blue-300
+    prose-p:mt-4 prose-p:leading-snug
+    prose-ol:mt-4 prose-ol:mb-6 prose-ol:leading-snug
+    prose-ul:mt-4 prose-ul:mb-6 prose-ul:leading-snug
+    prose-blockquote:mt-4 prose-blockquote:leading-snug
+    prose-hr:mt-6 prose-hr:border-t-2 prose-hr:border-solid prose-hr:border-slate-200
+    prose-figure:mt-4
+    prose-figcaption:mt-2 prose-figcaption:text-xs
+    prose-headings:mb-4
+    prose-table:mt-0
+    prose-th:mb-0
+    prose-img:my-0
+    prose-code:font-medium prose-code:bg-slate-100
+    max-w-none;
+}
+.viewer-markdown blockquote p:first-of-type:before,
+.viewer-markdown blockquote p:last-of-type:after {
+  @apply content-none;
+}
+
+/* Images */
+/* --------------------------------------------------------------- */
+
+
+/* Todo Lists */
+/* --------------------------------------------------------------- */
+
+.contains-task-list {
+  @apply pl-6 list-none;
+}
+.contains-task-list input[type="checkbox"] {
+  @apply appearance-none h-4 w-4 rounded border border-slate-200 relative mr-[0.3rem] ml-[-1.5rem] top-[0.15rem];
+}
+.contains-task-list input[type="checkbox"]:checked {
+  @apply border-indigo-600 bg-indigo-600 bg-no-repeat bg-contain;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+}
+
+/* Markdown TOC */
+/* --------------------------------------------------------------- */
+
+.viewer-markdown .toc      { @apply mt-4; }
+.viewer-markdown h1 + .toc { @apply mt-8; }
+
+.viewer-markdown .toc h1,
+.viewer-markdown .toc h2,
+.viewer-markdown .toc h3,
+.viewer-markdown .toc h4,
+.viewer-markdown .toc h5,
+.viewer-markdown .toc h6 {
+  @apply text-base text-indigo-600 font-sans my-0;
+}
+.viewer-markdown .toc a {
+  @apply text-indigo-600 font-normal no-underline hover:underline;
+}
+.viewer-markdown .toc li    { @apply m-0; }
+.viewer-markdown .toc ul ul { @apply pl-4; }
+
+/* Notebook Spacing */
+/* --------------------------------------------------------------- */
+
+.viewer-notebook { @apply py-16; }
+#clerk-static-app .viewer-notebook { @apply pt-[0.8rem] pb-16; }
+.viewer-markdown *:first-child:not(.viewer-code):not(li):not(h2) { @apply mt-0; }
+/*.viewer + .viewer { @apply mt-6; }*/
+.viewer + .viewer-result { @apply mt-0; }
+.viewer-code + .viewer-result { @apply mt-3; }
+.viewer-markdown + .viewer-markdown { @apply mt-0; }
+
+/* Sidenotes */
+/* --------------------------------------------------------------- */
+
+.sidenote-ref {
+  @apply top-[-3px] inline-flex justify-center items-center w-[18px] h-[18px]
+    rounded-full bg-slate-100 border border-slate-300 hover:bg-slate-200 hover:border-slate-300
+    m-0 ml-[4px] cursor-pointer;
+}
+.sidenote {
+  @apply hidden float-left clear-both mx-[2.5%] my-4 text-xs relative w-[95%];
+}
+.sidenote-ref.expanded + .sidenote {
+  @apply block;
+}
+@media (min-width: 860px) {
+  .sidenote-ref {
+    @apply top-[-0.5em] w-auto h-auto inline border-0 bg-transparent m-0 pointer-events-none;
+  }
+  .sidenote sup { @apply inline; }
+  .viewer-markdown .contains-sidenotes p { @apply max-w-[65%]; }
+  .viewer-markdown p .sidenote {
+    @apply mr-[-54%] mt-[0.2rem] w-1/2 float-right clear-right relative block;
+  }
+}
+.viewer-code + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-code-folded + .viewer:not(.viewer-markdown):not(.viewer-code):not(.viewer-code-folded),
+.viewer-result + .viewer-result {
+  @apply mt-2;
+}
+.viewer-code + .viewer-code-folded {
+  @apply mt-4;
+}
+.viewer-result {
+  @apply leading-tight mb-6;
+}
+.viewer-result figure {
+  @apply mt-0 !important;
+}
+@media (min-width: 768px) {
+  .devcard-desc > div {
+    @apply max-w-full m-0;
+  }
+}
+
+/* Command Palette */
+/* --------------------------------------------------------------- */
+
+.nj-commands-input {
+  @apply bg-transparent text-white;
+}
+.nj-context-menu-item:hover:not([disabled]) {
+  @apply cursor-pointer;
+  background-color: rgba(255,255,255,.14);
+}
+
+/* Devdocs */
+/* --------------------------------------------------------------- */
+
+.logo, .logo-white {
+  @apply block indent-[-999em];
+  background: url(/images/nextjournal-logo.svg) center center no-repeat;
+}
+.devdocs-body {
+  @apply font-inter;
+}
+
+/* Workarounds */
+/* --------------------------------------------------------------- */
+
+/* Fixes vega viewer resizing into infinity */
+.vega-embed .chart-wrapper { @apply h-auto !important; }
+/* fixes fraction separators being overridden by tw’s border-color */
+.katex * { @apply border-black; }
+</style><script src="https://storage.googleapis.com/nextjournal-cas-eu/assets/2pKcXZifbY4r2D1BS8vQ5BCjbxE2wA7Acn4fYycKAqXh1weovNVUKutSisf6gnzdHP6wnH4GXz4CapPzT7fNE9QR-viewer.js" type="module"></script><link href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" rel="stylesheet" type="text/css"><link href="https://fonts.bunny.net" rel="preconnect"><link href="https://fonts.bunny.net/css?family=fira-code:400,700%7Cfira-mono:400,700%7Cfira-sans:400,400i,500,500i,700,700i%7Cfira-sans-condensed:700,700i%7Cpt-serif:400,400i,700,700i" rel="stylesheet" type="text/css"></head><body><div id="clerk-static-app"></div><script type="module">let viewer = nextjournal.clerk.sci_env
+let app = nextjournal.clerk.static_app
+let opts = viewer.read_string("{:paths-fn index/build-paths, :out-path \"public/build\", :path->doc {\"src/solutions/2022/day01.clj\" {:path [], :nextjournal/value {:toc {:type :toc, :children [{:type :toc, :content [{:type :text, :text \"2022 - Day 1\"}], :heading-level 1, :children [{:type :toc, :content [{:type :text, :text \"Problem\"}], :heading-level 2, :children [{:type :toc, :content [{:type :text, :text \"Part 1\"}], :heading-level 3} {:type :toc, :content [{:type :text, :text \"Part 2\"}], :heading-level 3}]} {:type :toc, :content [{:type :text, :text \"Solution\"}], :heading-level 2}]}]}, :toc-visibility false, :atom-var-name->state #viewer-eval (nextjournal.clerk.render/intern-atoms! {}), :auto-expand-results? nil, :scope {:namespace :solutions.2022.day01}, :open-graph {:type \"article:clerk\", :title \"2022 - Day 1\", :description \"Santa's reindeer typically eat regular reindeer food, but they need a lot ofmagical energy to deliver presents on Christmas. For that, their favoritesnack is a special type of star fruit that only grows deep in the jungle. TheElves have brought you on their annual expedition to the grove where thefruit grows.\"}, :title \"2022 - Day 1\", :blocks [{:nextjournal/value [:div.viewer-markdown [\"h1\" {:id \"2022___day_1\"} [:span \"2022 - Day 1\"]] [\"h2\" {:id \"problem\"} [:span \"Problem\"]] [\"h3\" {:id \"part_1\"} [:span \"Part 1\"]] [:p [:span \"Santa's reindeer typically eat regular reindeer food, but they need a lot of\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"magical energy to deliver presents on Christmas. For that, their favorite\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"snack is a special type of \"] [:code [:span \"star\"]] [:span \" fruit that only grows deep in the jungle. The\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"Elves have brought you on their annual expedition to the grove where the\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"fruit grows.\"]] [:p [:span \"To supply enough magical energy, the expedition needs to retrieve a minimum\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"of \"] [:code [:span \"fifty stars\"]] [:span \" by December 25th. Although the Elves assure you that the grove\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"has plenty of fruit, you decide to grab any fruit you see along the way, just\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"in case.\"]] [:p [:span \"Collect stars by solving puzzles. Two puzzles will be made available on each\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"day in the Advent calendar; the second puzzle is unlocked when you complete\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"the first. Each puzzle grants \"] [:code [:span \"one star\"]] [:span \". Good luck!\"]] [:p [:span \"The jungle must be too overgrown and difficult to navigate in vehicles or\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"access from the air; the Elves' expedition traditionally goes on foot. As\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"your boats approach land, the Elves begin taking inventory of their supplies.\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"One important consideration is food - in particular, the number of \"] [:code [:span \"Calories\"]] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"each Elf is carrying (your puzzle input).\"]] [:p [:span \"The Elves take turns writing down the number of Calories contained by the\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"various meals, snacks, rations, etc. that they've brought with them, one item\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"per line. Each Elf separates their own inventory from the previous Elf's\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"inventory (if any) by a blank line.\"]] [:p [:span \"For example, suppose the Elves finish writing their items' Calories and end up with the following list:\"]] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:div.viewer-code [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value \"1000\\n2000\\n3000\\n\", :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}}]], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:div.viewer-code [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value \"4000\\n\", :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}}]], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:div.viewer-code [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value \"5000\\n6000\\n\", :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}}]], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:div.viewer-code [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value \"7000\\n8000\\n9000\\n\", :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}}]], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:div.viewer-code [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value \"10000\\n\", :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}}]], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:p [:span \"This list represents the Calories of the food carried by five Elves:\"]] [:ul [:li [:<> [:span \"The first Elf is carrying food with \"] [:code [:span \"1000\"]] [:span \", \"] [:code [:span \"2000\"]] [:span \", and \"] [:code [:span \"3000\"]] [:span \" Calories, a total of \"] [:code [:span \"6000\"]] [:span \" Calories.\"]]] [:li [:<> [:span \"The second Elf is carrying one food item with \"] [:code [:span \"4000\"]] [:span \" Calories.\"]]] [:li [:<> [:span \"The third Elf is carrying food with \"] [:code [:span \"5000\"]] [:span \" and \"] [:code [:span \"6000\"]] [:span \" Calories, a total of \"] [:code [:span \"11000\"]] [:span \" Calories.\"]]] [:li [:<> [:span \"The fourth Elf is carrying food with \"] [:code [:span \"7000\"]] [:span \", \"] [:code [:span \"8000\"]] [:span \", and \"] [:code [:span \"9000\"]] [:span \" Calories, a total of \"] [:code [:span \"24000\"]] [:span \" Calories.\"]]] [:li [:<> [:span \"The fifth Elf is carrying one food item with \"] [:code [:span \"10000\"]] [:span \" Calories.\"]]]] [:p [:span \"In case the Elves get hungry and need extra snacks, they need to know which\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"Elf to ask: they'd like to know how many Calories are being carried by the\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"Elf carrying the \"] [:strong [:span \"most\"]] [:span \" Calories. In the example above, this is \"] [:code [:span \"24000\"]] [:span \" (carried\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"by the fourth Elf).\"]] [:p [:span \"Find the Elf carrying the most Calories. \"] [:strong [:span \"How many total Calories is that Elf\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"carrying?\"]]] [\"h3\" {:id \"part_2\"} [:span \"Part 2\"]] [:p [:span \"By the time you calculate the answer to the Elves' question, they've already\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"realized that the Elf carrying the most Calories of food might eventually \"] [:strong [:span \"run\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"out of snacks\"]] [:span \".\"]] [:p [:span \"To avoid this unacceptable situation, the Elves would instead like to know\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"the total Calories carried by the \"] [:strong [:span \"top three\"]] [:span \" Elves carrying the most Calories.\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"That way, even if one of those Elves runs out of snacks, they still have two\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"backups.\"]] [:p [:span \"In the example above, the top three Elves are the fourth Elf (with \"] [:code [:span \"24000\"]] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"Calories), then the third Elf (with \"] [:code [:span \"11000\"]] [:span \" Calories), then the fifth Elf (with\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:code [:span \"10000\"]] [:span \" Calories). The sum of the Calories carried by these three elves is\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:code [:span \"45000\"]] [:span \".\"]] [:p [:span \"Find the top three Elves carrying the most Calories. \"] [:strong [:span \"How many Calories are\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"those Elves carrying in total?\"]]]], :nextjournal/viewer {:name :html-, :render-fn #viewer-fn identity, :hash \"5dsKyVZX2dPvsyoeg6dNrfeuqAh5UK\"}} {:nextjournal/value [:div.viewer-markdown [\"h2\" {:id \"solution\"} [:span \"Solution\"]] [:p [:span \"Ok, so this looks quite simple; sum all the \\\"groups\\\" of elves.\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"First things first, let's load our input and parse it\"]]], :nextjournal/viewer {:name :html-, :render-fn #viewer-fn identity, :hash \"5dsKyVZX2dPvsyoeg6dNrfeuqAh5UK\"}} {:nextjournal/value \"(def input (->> (slurp (io/resource \\\"inputs/2022/day01.txt\\\")) ;; Load the resource\\n                (str/split-lines)                             ;; Split into lines\\n                (partition-by str/blank?)                     ;; Partition by blank spaces (to give our groups)\\n                (remove #(str/blank? (first %)))              ;; Remove the blank spaces\\n                (map #(transduce (map parse-long) + 0 %))     ;; Map a transducer over the list of numbers (more info below)\\n                (sort >)))                                    ;; Sort by size\", :nextjournal/opts {:loc {:line 95, :column 1}}, :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}} {:path [], :nextjournal/value {:nextjournal/presented {:path [], :nextjournal/value [{:path [0], :nextjournal/value 70296, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [1], :nextjournal/value 68707, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [2], :nextjournal/value 66378, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [3], :nextjournal/value 66193, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [4], :nextjournal/value 63414, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [5], :nextjournal/value 63131, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [6], :nextjournal/value 62799, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [7], :nextjournal/value 62448, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [8], :nextjournal/value 61755, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [9], :nextjournal/value 60856, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [10], :nextjournal/value 60856, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [11], :nextjournal/value 60495, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [12], :nextjournal/value 60336, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [13], :nextjournal/value 60325, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [14], :nextjournal/value 60309, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [15], :nextjournal/value 60041, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [16], :nextjournal/value 60028, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [17], :nextjournal/value 59804, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [18], :nextjournal/value 59684, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:path [19], :nextjournal/value 59616, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}} {:nextjournal/value {:n 20, :path [], :total 240, :offset 20}, :nextjournal/viewer {:name :elision, :render-fn #viewer-fn nextjournal.clerk.render/render-elision, :hash \"5drk4yq8KWf74KRukbDnW8K5fMwe1P\"}}], :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-coll, :opening-paren \"(\", :closing-paren (\")\"), :page-size 20, :hash \"5drCaZg3GZ5pGiaCNpMq9dEBvceFbm\"}}}, :nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn nextjournal.clerk.render/render-result, :hash \"5drtBjvRGKwhUFrDTtWvTAduWDETV1\"}} {:nextjournal/value [:div.viewer-markdown [:p [:span \"Great! We now have our list of numbers, and as both parts are the same it's\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"simply a case of treating that list slightly differently.\"]] [:p [:span \"For part 1, we just care about the biggest number\"]]], :nextjournal/viewer {:name :html-, :render-fn #viewer-fn identity, :hash \"5dsKyVZX2dPvsyoeg6dNrfeuqAh5UK\"}} {:nextjournal/value \"(defn part-1\\n  [input]\\n  (first input))\", :nextjournal/opts {:loc {:line 108, :column 1}}, :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}} {:nextjournal/value [:div.viewer-markdown [:p [:span \"And running it gives\"]]], :nextjournal/viewer {:name :html-, :render-fn #viewer-fn identity, :hash \"5dsKyVZX2dPvsyoeg6dNrfeuqAh5UK\"}} {:path [], :nextjournal/value {:nextjournal/presented {:path [], :nextjournal/value 70296, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}}}, :nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn nextjournal.clerk.render/render-result, :hash \"5drtBjvRGKwhUFrDTtWvTAduWDETV1\"}} {:nextjournal/value [:div.viewer-markdown [:p [:span \"But what's that \\\"transducer\\\" thing?\"]] [:p [:span \"So, there's two kinds of sequences (for our argument's sake); eager and lazy.\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"Eager sequences evaluate all the elements and hold everything in memory,\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"whereas lazy sequences are evaluated and stored as they're needed.\"]] [:p [:span \"As you can imagine, in an ideal world we'd probably want to use lazy\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"sequences for big, slow data and eager sequences for small, fast data.\"]] [:p [:span \"Later in Clojure's life, Rich Hickey realised that implementing map et al for\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"collections, then for streams, then for observables, then for channels is\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"redundant, to specific and inefficient. So he set out to see if there was a\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"way to write these functions once and for all.\"]] [:p [:span \"Great! ... But how does that help us?\"]] [:p [:span \"Let's start with a simple example\"]]], :nextjournal/viewer {:name :html-, :render-fn #viewer-fn identity, :hash \"5dsKyVZX2dPvsyoeg6dNrfeuqAh5UK\"}} {:nextjournal/value \"(defn part-2\\n  [input]\\n  (transduce (take 3) + 0 input))\", :nextjournal/opts {:loc {:line 135, :column 1}}, :nextjournal/viewer {:name :code, :render-fn #viewer-fn nextjournal.clerk.render/render-code, :hash \"5duGVW4Xoi1QoW73J5wMRghqm9uVoW\"}} {:nextjournal/value [:div.viewer-markdown [:p [:span \"What's going on there? Why does \"] [:code [:span \"take\"]] [:span \" not have a collection argument?\"]] [:p [:span \"Well, the short version is a number of these collection functions return a\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"\\\"transducer\\\"; that is a function that takes some step function and returns\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"that function wrapped in some other logic.\"]] [:p [:span \"In this case, \"] [:code [:span \"(take 3)\"]] [:span \" returns a function that returns the 3 numbers and\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:code [:span \"transduce\"]] [:span \" then operates the same as \"] [:code [:span \"reduce\"]] [:span \" except taking the transducer\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"returned. Due to the size of the data and the operation, it's pointless\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"except for demonstration purposes.\"]] [:p [:span \"That transducer could for example be a complex operation like \\\"given a\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"sequence of the first 10 billion numbers, filter out the odd primes bigger\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"than 251\\\" which would operate at \"] [:code [:span \"O(1)\"]] [:span \" as it goes through each element\"] [#viewer-eval nextjournal.clerk.render/inspect-presented {:nextjournal/value [:span \" \"], :nextjournal/viewer {:name :html, :render-fn #viewer-fn identity, :hash \"5dqwbRQVFnHkdooT8QV8nfPHBGVWtj\"}}] [:span \"in-turn lazily.\"]] [:p [:span \"For a slightly more in-depth video, I would recommend \"] [:a {:href \"https://www.youtube.com/watch?v=TaazvSJvBaw\"} [:span \"Fred Overflow's\"]] [:span \".\"]] [:p [:span \"Running part 2 gives\"]]], :nextjournal/viewer {:name :html-, :render-fn #viewer-fn identity, :hash \"5dsKyVZX2dPvsyoeg6dNrfeuqAh5UK\"}} {:path [], :nextjournal/value {:nextjournal/presented {:path [], :nextjournal/value 205381, :nextjournal/viewer {:render-fn #viewer-fn nextjournal.clerk.render/render-number, :hash \"5dr5kWRtr7mCj9ikbmX2S4HCkE4Xxt\"}}}, :nextjournal/viewer {:name :clerk/result, :render-fn #viewer-fn nextjournal.clerk.render/render-result, :hash \"5drtBjvRGKwhUFrDTtWvTAduWDETV1\"}}], :css-class nil}, :nextjournal/viewer {:name :clerk/notebook, :render-fn #viewer-fn nextjournal.clerk.render/render-notebook, :hash \"5dt1qwFEn2BQwdEM84VqwY4LR6p4YV\"}}}, :index \"src/index.clj\", :browse? false, :paths [\"src/index.clj\" \"src/solutions/2022/day01.clj\" \"src/solutions/2022/day02.clj\" \"src/solutions/2022/day03.clj\" \"src/solutions/2022/day04.clj\"], :current-path \"src/solutions/2022/day01.clj\", :bundle? false, :path->url {\"src/index.clj\" \"\", \"src/solutions/2022/day01.clj\" \"src/solutions/2022/day01.html\", \"src/solutions/2022/day02.clj\" \"src/solutions/2022/day02.html\", \"src/solutions/2022/day03.clj\" \"src/solutions/2022/day03.html\", \"src/solutions/2022/day04.clj\" \"src/solutions/2022/day04.html\"}, :expanded-paths [\"src/index.clj\" \"src/solutions/2022/day01.clj\" \"src/solutions/2022/day02.clj\" \"src/solutions/2022/day03.clj\" \"src/solutions/2022/day04.clj\"], :report-fn #object[nextjournal.clerk.builder$stdout_reporter 0x41f968b0 \"nextjournal.clerk.builder$stdout_reporter@41f968b0\"]}")
+app.init(opts)
+</script></body></html>
