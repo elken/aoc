@@ -48,4 +48,6 @@
                :task (exec 'cognitect.test-runner.api/test)
                :exec-args {:dirs ["src"] :patterns ["solutions.*"]}
                :org.babashka/cli {:coerce {:nses [:symbol]
-                                           :vars [:symbol]}}}}}
+                                           :vars [:symbol]}}}
+         serve {:task (clojure "-M:serve")}
+         build {:task (clojure "-M:build")}}}

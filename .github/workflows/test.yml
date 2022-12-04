@@ -12,12 +12,38 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ConorMacBride/install-package@v1
+      - name: 🔧 Install java
+        uses: actions/setup-java@v1
         with:
-          apt: openjdk-11-jdk-headless
+          java-version: '11.0.7'
+
+      - name: 🗝 maven cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.m2
+            ~/.gitlibs
+          key: ${{ runner.os }}-maven-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: 🗝 Clerk Cache
+        uses: actions/cache@v2
+        with:
+          path: .cache
+          key: ${{ runner.os }}-clerk
 
       - name: Install bb
         run: bash < <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)
 
       - name: Run tests
         run: bb test
+
+      - name: 🏗 Clerk Build
+        run: bb build
+
+      - name: 🚀 Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.6
+        with:
+          branch: gh-pages
+          folder: public/build
