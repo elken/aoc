@@ -21,7 +21,7 @@
   [input]
   (println "Part 1"))
 
-;; And running it gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
@@ -30,7 +30,7 @@
   [input]
   (println "Part 2"))
 
-;; Running part 2 gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
 

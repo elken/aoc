@@ -135,7 +135,7 @@
   [input]
   (transduce (map scores) + 0 input))
 
-;; And running it gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
@@ -145,7 +145,7 @@
   [input]
   (transduce (map results) + 0 input))
 
-;; And running it gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
 

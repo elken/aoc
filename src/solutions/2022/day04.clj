@@ -184,7 +184,7 @@
   [input]
   (compute-sets input #(or (set/subset? %1 %2)
                            (set/subset? %2 %1))))
-;; Which looks like
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
@@ -197,7 +197,7 @@
   [input]
   (compute-sets input #(> (count (set/intersection %1 %2)) 0)))
 
-;; Which looks like
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
 

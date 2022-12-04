@@ -114,7 +114,7 @@
   [input]
   (first input))
 
-;; And running it gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
@@ -160,7 +160,7 @@
 ;; For a slightly more in-depth video, I would recommend [Fred Overflow's](https://www.youtube.com/watch?v=TaazvSJvBaw).
 ;;
 
-;; Running part 2 gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
 

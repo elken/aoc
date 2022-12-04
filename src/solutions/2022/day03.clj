@@ -179,7 +179,7 @@
   [input]
   (transduce (map (comp get-priority check-items split-rucksack)) + 0 input))
 
-;; And running it gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
@@ -198,7 +198,7 @@
   [input]
   (transduce (map (comp get-priority check-items)) + 0 (partition 3 input)))
 
-;; Running part 2 gives
+;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
 
