@@ -185,7 +185,7 @@
   (compute-sets input #(or (set/subset? %1 %2)
                            (set/subset? %2 %1))))
 ;; Which looks like
-{:nextjournal.clerk/visibility {:result :show}}
+{:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
 ;; Part 2 wants us to check if there's _any_ overlap; which in set terms is just
@@ -198,7 +198,7 @@
   (compute-sets input #(> (count (set/intersection %1 %2)) 0)))
 
 ;; Which looks like
-{:nextjournal.clerk/visibility {:result :show}}
+{:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
 
 {:nextjournal.clerk/visibility {:code :hide :result :hide}}
