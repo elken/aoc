@@ -15,7 +15,6 @@
 (ns index
   {:nextjournal.clerk/visibility {:code :hide :result :hide}}
   (:require [babashka.fs :as fs]
-            [clojure.string :as str]
             [nextjournal.clerk :as clerk]))
 
 (defn build-paths-year

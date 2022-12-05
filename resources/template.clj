@@ -1,13 +1,17 @@
-;; # YEAR - Day DAY
-;;
-;; ## Problem
-;; ### Part 1
-;; ### Part 2
-{:nextjournal.clerk/visibility {:code :hide :result :hide}}
+^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.YEAR.dayDAY
-    (:require [clojure.java.io :as io]
-              [clojure.test :as t :refer [deftest]]
-              [clojure.string :as str]))
+  (:require [clojure.java.io :as io]
+            [clojure.test :as t :refer [deftest]]
+            [util :as u]
+            [nextjournal.clerk :as clerk]
+            [clojure.string :as str]))
+{:nextjournal.clerk/visibility {:code :show :result :show}}
+
+^{::clerk/viewer :html ::clerk/visibility :hide}
+[:style "em{color: #fff;font-style: normal;text-shadow: 0 0 5px #fff;}.viewer-result:first-child{display: none;}"]
+
+{:nextjournal.clerk/visibility {:code :hide :result :show}}
+(clerk/html (u/load-problem "DAY" "YEAR"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
 ;; ## Solution
