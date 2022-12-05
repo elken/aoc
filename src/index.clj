@@ -25,13 +25,15 @@
        fs/real-path
        fs/list-dir
        (map #(fs/relativize (fs/real-path ".") %))
-       (map str)))
+       (map str)
+       sort))
 
 (defn build-paths []
   (->> "src/solutions"
        fs/list-dir
        (map #(map str (fs/list-dir %)))
-       first))
+       first
+       sort))
 
 {:nextjournal.clerk/visibility {:result :show}}
 
