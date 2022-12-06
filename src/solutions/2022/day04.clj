@@ -4,7 +4,6 @@
    [clojure.java.io :as io]
    [clojure.set :as set]
    [clojure.string :as str]
-   [clojure.test :as t :refer [deftest]]
    [nextjournal.clerk :as clerk]
    [util :as u]))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
@@ -117,8 +116,3 @@
 ;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
-
-{:nextjournal.clerk/visibility {:code :hide :result :hide}}
-(deftest test-answers
-  (t/is (= 305 (part-1 input)))
-  (t/is (= 811 (part-2 input))))

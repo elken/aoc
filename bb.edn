@@ -1,8 +1,4 @@
 {:paths ["src" "resources"]
- :deps {io.github.cognitect-labs/test-runner
-        {:git/tag "v0.5.0" :git/sha "b3fd0d2"}
-        org.clojure/tools.namespace {:git/url "https://github.com/babashka/tools.namespace"
-                                     :git/sha "3625153ee66dfcec2ba600851b5b2cbdab8fae6c"}}
  :tasks {:requires ([babashka.fs :as fs]
                     [clojure.string :as str]
                     [clojure.java.io :as io]
@@ -42,12 +38,5 @@
                            (-> template
                                (str/replace (re-pattern "YEAR") year)
                                (str/replace (re-pattern "DAY") day))))}
-         test {:extra-paths ["test"]
-               :extra-deps {io.github.cognitect-labs/test-runner
-                            {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
-               :task (exec 'cognitect.test-runner.api/test)
-               :exec-args {:dirs ["src"] :patterns ["solutions.*"]}
-               :org.babashka/cli {:coerce {:nses [:symbol]
-                                           :vars [:symbol]}}}
          serve {:task (clojure "-M:serve")}
          build {:task (clojure "-M:build")}}}

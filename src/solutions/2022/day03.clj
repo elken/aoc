@@ -4,7 +4,6 @@
    [clojure.java.io :as io]
    [clojure.set :as set]
    [clojure.string :as str]
-   [clojure.test :as t :refer [deftest]]
    [nextjournal.clerk :as clerk]
    [util :as u]))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
@@ -109,8 +108,3 @@
 (first (partition 3 input))
 (check-items (first (partition 3 input)))
 (get-priority (check-items (first (partition 3 input))))
-
-{:nextjournal.clerk/visibility {:code :hide :result :hide}}
-(deftest test-answers
-  (t/is (= 7845 (part-1 input)))
-  (t/is (= 2790 (part-2 input))))

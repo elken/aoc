@@ -3,7 +3,6 @@
     (:require
      [clojure.java.io :as io]
      [clojure.string :as str]
-     [clojure.test :as t :refer [deftest]]
      [nextjournal.clerk :as clerk]
      [util :as u]))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
@@ -116,8 +115,3 @@
 ;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
-
-{:nextjournal.clerk/visibility {:result :hide}}
-(deftest test-answers
-  (t/is (= "LBLVVTVLP" (part-1 input)))
-  (t/is (= "TPFFBDRJD" (part-2 input))))

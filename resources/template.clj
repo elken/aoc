@@ -1,7 +1,6 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.YEAR.dayDAY
   (:require [clojure.java.io :as io]
-            [clojure.test :as t :refer [deftest]]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.string :as str]))
@@ -37,8 +36,3 @@
 ;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
-
-{:nextjournal.clerk/visibility {:result :hide}}
-(deftest test-answers
-  (t/is (= 4 (part-1 input)))
-  (t/is (= 4 (part-2 input))))

@@ -33,14 +33,8 @@ jobs:
           path: .cache
           key: ${{ runner.os }}-clerk
 
-      - name: Install bb
-        run: bash < <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install)
-
-      - name: Run tests
-        run: bb test
-
       - name: 🏗 Clerk Build
-        run: bb build
+        run: clj -M:build
 
       - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.6
