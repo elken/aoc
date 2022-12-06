@@ -8,7 +8,7 @@
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
 ^{::clerk/viewer :html ::clerk/visibility :hide}
-[:style "em{color: #fff;font-style: normal;text-shadow: 0 0 5px #fff;}.viewer-result:first-child{display: none;}"]
+(u/css)
 
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "05" "2022"))
