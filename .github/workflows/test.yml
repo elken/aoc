@@ -17,6 +17,11 @@ jobs:
         with:
           java-version: '11.0.7'
 
+      - name: 🔧 Install clojure
+        uses: DeLaGuardo/setup-clojure@master
+        with:
+          cli: '1.10.3.943'
+
       - name: 🗝 maven cache
         uses: actions/cache@v2
         with:
@@ -34,7 +39,9 @@ jobs:
           key: ${{ runner.os }}-clerk
 
       - name: 🏗 Clerk Build
-        run: clj -M:build
+        env:
+          AOC_TOKEN: ${{ secrets.AOC_TOKEN }}
+        run: clojure -M:build
 
       - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.6
