@@ -39,11 +39,11 @@
 ;; number is the length + the current index (since the index is how many groups
 ;; in we are, not how many chars in).
 (defn get-header-index [input length]
-(let [groups (partition length 1 input)]
-  (loop [index 0]
-    (if (= length (count (distinct (nth groups index))))
-      (+ index length)
-      (recur (inc index))))))
+  (let [groups (partition length 1 input)]
+    (loop [index 0]
+      (if (= length (count (distinct (nth groups index))))
+        (+ index length)
+        (recur (inc index))))))
 
 ;; Both parts differ only on length, so we can trivially define part 1
 {:nextjournal.clerk/visibility {:result :hide}}
