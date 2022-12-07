@@ -3,6 +3,7 @@
         io.github.nextjournal/clerk {:git/sha "bdf79084374fc89cd956ec076847c0845c80c911"}
         clj-http/clj-http {:mvn/version "3.12.3"}
         org.clj-commons/hickory {:mvn/version "0.7.3"}
+        org.clojure/core.match {:mvn/version "1.0.0"}
         org.babashka/cli {:mvn/version "0.5.40"}
         ;; silence log warnings
         org.slf4j/slf4j-nop {:mvn/version "1.7.36"}}
