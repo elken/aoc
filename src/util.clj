@@ -4,15 +4,16 @@
    [hickory.core :as h]
    [hickory.render :as hr]
    [hickory.select :as s]
-   [babashka.fs :as fs]
-   [nextjournal.clerk :as clerk]))
+   [babashka.fs :as fs]))
 
 (defn load-problem [day year]
   (let [day (str (parse-long day))
         file-name (format "day%s.html" day)
         path (fs/path (fs/temp-dir) file-name)]
     (when-not (fs/exists? path)
-      (let [resp (client/get (format "https://adventofcode.com/%s/day/%s" year day) {:headers {"Cookie" (str "session=" (System/getenv "AOC_TOKEN"))}})]
+      (let [resp (->> {:headers {"Cookie" (str "session=" (System/getenv "AOC_TOKEN"))
+                                 "User-Agent" (System/getenv "AOC_USER_AGENT")}}
+                      (client/get (format "https://adventofcode.com/%s/day/%s" year day)))]
         (when (= 200 (:status resp))
           (spit (str path) (:body resp)))))
 
