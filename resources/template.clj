@@ -17,7 +17,7 @@
 ;;
 ;; First things first, let's load our input and parse it
 (def input (->> (slurp (io/resource "inputs/YEAR/dayDAY.txt")) ;; Load the resource
-                (str/split-lines)))                            ;; Split into lines
+                str/split-lines))                              ;; Split into lines
 
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn part-1
