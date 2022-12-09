@@ -41,6 +41,7 @@ jobs:
       - name: 🏗 Clerk Build
         env:
           AOC_TOKEN: ${{ secrets.AOC_TOKEN }}
+          AOC_USER_AGENT: ${{ secrets.AOC_USER_AGENT }}
         run: clojure -M:build
 
       - name: 🚀 Deploy
