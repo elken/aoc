@@ -6,9 +6,6 @@
    [nextjournal.clerk :as clerk]
    [util :as u]))
 
-^{::clerk/viewer :html ::clerk/visibility :hide}
-(u/css)
-
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "01" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}

@@ -7,8 +7,6 @@
             [clojure.string :as str]))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-^{::clerk/viewer :html ::clerk/visibility :hide}
-(u/css)
 
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "07" "2022"))

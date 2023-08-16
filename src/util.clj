@@ -20,11 +20,3 @@
     (let [doc (h/as-hickory (h/parse (slurp (str path))))
           parts (map #(hr/hickory-to-html %) (s/select (s/child (s/tag :article)) doc))]
       (apply str (mapcat str parts)))))
-
-(defn css []
-  [:style "em{font-style: normal;}
-html:not(.dark) pre{background-color: #f1f5f9 !important;color: #7aaac4 !important;}
-.dark em{color: #fff;text-shadow: 0 0 5px #fff;}
-.dark pre {background-color: rgb(31 41 55 / var(--tw-bg-opacity)) !important;}
-html:not(.dark) em{color: #000; text-shadow: 0 0 2px #000;}
-.viewer-result:first-child{display: none;}"])

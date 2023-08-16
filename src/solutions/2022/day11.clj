@@ -8,8 +8,6 @@
             [clojure.math :as math]))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-^{::clerk/viewer :html ::clerk/visibility :hide}
-(u/css)
 
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "11" "2022"))

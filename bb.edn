@@ -39,4 +39,4 @@
                                (str/replace (re-pattern "YEAR") year)
                                (str/replace (re-pattern "DAY") day))))}
          serve {:task (clojure "-M:serve")}
-         build {:task (clojure "-M:build")}}}
+         build {:task (clojure "-M:nextjournal/clerk")}}}

@@ -16,8 +16,19 @@
 ;; Greatly inspired by [advent of clerk](https://github.com/nextjournal/advent-of-clerk)
 (ns index
   {:nextjournal.clerk/visibility {:code :hide :result :hide}}
-  (:require [babashka.fs :as fs]
-            [nextjournal.clerk :as clerk]))
+  (:require
+   [babashka.fs :as fs]
+   [nextjournal.clerk :as clerk]
+   [nextjournal.clerk.view :as clerk.view]
+   [clojure.java.io :as io]
+   [clojure.string :as str]))
+
+(alter-var-root #'clerk.view/include-css+js
+                (fn [include-css+js-orig extra-includes]
+                  (fn [state]
+                    (concat (include-css+js-orig state)
+                            extra-includes)))
+                (list [:style#extra-styles (slurp (clojure.java.io/resource "style.css"))]))
 
 (defn build-paths-year
   "Find all solutions and return the paths"
@@ -47,7 +58,9 @@
                 (into [:ul]
                       (mapv (fn [path]
                               (when-let [day (second (re-matches #".*day(\d+).clj" path))]
-                                [:li [:a {:href (clerk/doc-url path)} "Day " day]]))
+                                [:li [:a {:href (-> path
+                                                    (str/replace ".clj" ".html")
+                                                    clerk/doc-url)} "Day " day]]))
                             (build-paths-year (str (first year)))))])
              (->> "src/solutions"
                   fs/real-path
