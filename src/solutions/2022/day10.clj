@@ -6,7 +6,6 @@
             [clojure.string :as str]))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "10" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
@@ -24,7 +23,7 @@
 ;; parsing and simplify everything.
 ;;
 ;; First things first, let's load our input and parse it
-;; 
+;;
 ;; "It takes 2 cycles to complete" is the same as saying "do a `noop` before
 ;; every `addx`"; which is _also_ the same as saying "add nothing here". So
 ;; let's replace all the instructions with just the value to add, and before
@@ -78,11 +77,11 @@
   '(fn [result]
      [:div.grid {:style {:grid-template-columns "repeat(40, 1fr)" :grid-template-rows "repeat(6, 1fr)"}}
       (map-indexed (fn [idx val]
-                     (when-not (str/blank? val)
+                     (when-not (clojure.string/blank? val)
                        [:div.inline-block {:id idx
                                            :style {:width 16 :height 16}
                                            :class (if (= "#" val) "bg-black dark:bg-white" "bg-white dark:bg-black")}]))
-                   (str/join "\n" (map :nextjournal/value result)))])
+                   (clojure.string/join "\n" (map :nextjournal/value result)))])
   (part-2 input))
 
 ;; Note: view the [raw code](https://github.com/elken/aoc/blob/master/src/solutions/2022/day10.clj) to see the code for the viewer
