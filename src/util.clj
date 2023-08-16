@@ -8,7 +8,7 @@
 
 (defn load-problem [day year]
   (let [day (str (parse-long day))
-        file-name (format "day%s.html" day)
+        file-name (format "day%s-%s.html" day year)
         path (fs/path (fs/temp-dir) file-name)]
     (when-not (fs/exists? path)
       (let [resp (->> {:headers {"Cookie" (str "session=" (System/getenv "AOC_TOKEN"))

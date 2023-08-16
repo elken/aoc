@@ -32,25 +32,6 @@ Each namespace has a call that looks like
 (clerk/html (u/load-problem "10" "2022"))
 #+end_src
 
-Which calls out to the below function
-
-#+begin_src clojure
-(defn load-problem [day year]
-  (let [day (str (parse-long day))
-        file-name (format "day%s.html" day)
-        path (fs/path (fs/temp-dir) file-name)]
-    (when-not (fs/exists? path)
-      (let [resp (->> {:headers {"Cookie" (str "session=" (System/getenv "AOC_TOKEN"))
-                                 "User-Agent" (System/getenv "AOC_USER_AGENT")}}
-                      (client/get (format "https://adventofcode.com/%s/day/%s" year day)))]
-        (when (= 200 (:status resp))
-          (spit (str path) (:body resp)))))
-
-    (let [doc (h/as-hickory (h/parse (slurp (str path))))
-          parts (map #(hr/hickory-to-html %) (s/select (s/child (s/tag :article)) doc))]
-      (apply str (mapcat str parts)))))
-#+end_src
-
 Which attempts to get the page for the problem (with the user's token; so that
 part 2 can be acquired) and using a custom user-agent so that Eric knows where
 this is coming from (in this case it's just a link to this repo). The page is
