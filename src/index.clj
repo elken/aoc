@@ -3,6 +3,8 @@
 ;; [Advent of Code](https://adventofcode.com) with
 ;; [Clerk](https://clerk.vision).
 ;;
+;; Solutions authored by [@elken](https://github.com/elken/) with love in Clojure. 💕
+;;
 ;; Below is a listing of all my solutions grouped by year.
 ;;
 ;; All the solutions also include the original problem spec, along with my commentary.
