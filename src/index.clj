@@ -59,7 +59,7 @@
                       (mapv (fn [path]
                               (when-let [day (second (re-matches #".*day(\d+).clj" path))]
                                 [:li [:a {:href (-> path
-                                                    (str/replace ".clj" ".html")
+                                                    (str/replace ".clj" "")
                                                     clerk/doc-url)} "Day " day]]))
                             (build-paths-year (str (first year)))))])
              (->> "src/solutions"
