@@ -43,12 +43,12 @@
 (defn build-paths []
   (->> "src/solutions"
        fs/list-dir
+       (map str)
+       sort
        (map #(map str (fs/list-dir %)))
-       first
-       sort))
+       flatten))
 
 {:nextjournal.clerk/visibility {:result :show}}
-
 ^::clerk/no-cache
 (clerk/html
  (into [:div]
