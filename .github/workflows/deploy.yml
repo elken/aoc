@@ -43,8 +43,6 @@ jobs:
           AOC_TOKEN: ${{ secrets.AOC_TOKEN }}
           AOC_USER_AGENT: ${{ secrets.AOC_USER_AGENT }}
         run: |
-          ls -al
-          ls -al src/*
           NODE_PATH=$(yarn global dir)/node_modules bb build
 
       - name: 🚀 Deploy
