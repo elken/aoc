@@ -13,12 +13,12 @@
                                :exec-args {:index "src/index.clj"
                                            :ssr true
                                            :compile-css true
-                                           :paths-fn index/build-paths}
+                                           :paths ["src/solutions/*/*.clj"]}
                                :main-opts ["-m" "babashka.cli.exec"]}
            :serve {:exec-fn nextjournal.clerk/serve!
                    :exec-args {:index "src/index.clj"
                                :watch-paths ["src"]
                                :port 7878
                                :compile-css true
-                               :paths-fn index/build-paths}
+                               :paths ["src/solutions/*/*.clj"]}
                    :main-opts ["-m" "babashka.cli.exec"]}}}

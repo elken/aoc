@@ -21,7 +21,8 @@
    [nextjournal.clerk :as clerk]
    [nextjournal.clerk.view :as clerk.view]
    [clojure.java.io :as io]
-   [clojure.string :as str]))
+   [clojure.string :as str]
+   [util :as u]))
 
 (alter-var-root #'clerk.view/include-css+js
                 (fn [include-css+js-orig extra-includes]
@@ -30,40 +31,34 @@
                             extra-includes)))
                 (list [:style#extra-styles (slurp (clojure.java.io/resource "style.css"))]))
 
-(defn build-paths-year
-  "Find all solutions and return the paths"
-  [year]
-  (->> (format "src/solutions/%s" year)
-       fs/real-path
-       fs/list-dir
-       (map #(fs/relativize (fs/real-path ".") %))
-       (map str)
-       sort))
-
 (defn build-paths []
-  (->> "src/solutions"
-       fs/list-dir
-       (map str)
-       sort
-       (map #(map str (fs/list-dir %)))
-       flatten))
+  (-> "src/solutions"
+      fs/list-dir
+      (fs/list-dirs "*.clj")
+      sort))
+
+(defn group-solutions []
+  (->> (build-paths)
+       (group-by
+        (fn [path]
+          (let [[_ _ year _] (fs/components path)]
+            (str year))))
+       (sort-by first)))
 
 {:nextjournal.clerk/visibility {:result :show}}
 ^::clerk/no-cache
 (clerk/html
  (into [:div]
-       (mapv (fn [[year]]
+       (mapv (fn [[year paths]]
                [:section
-                [:h1 (str year)]
+                [:h1 year]
                 (into [:ul]
                       (mapv (fn [path]
                               (when-let [day (second (re-matches #".*day(\d+).clj" path))]
-                                [:li [:a {:href (-> path
-                                                    (str/replace ".clj" "")
-                                                    clerk/doc-url)} "Day " day]]))
-                            (build-paths-year (str (first year)))))])
-             (->> "src/solutions"
-                  fs/real-path
-                  fs/list-dir
-                  (map (comp fs/components last))
-                  reverse))))
+                                [:li
+                                 [:a {:href (-> path
+                                                (str/replace ".clj" "")
+                                                clerk/doc-url)}
+                                  (util/load-title day year)]]))
+                            (map str paths)))])
+             (group-solutions))))
