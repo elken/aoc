@@ -1,11 +1,13 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day01
+  {:nextjournal.clerk/toc true}
   (:require
    [clojure.java.io :as io]
    [clojure.string :as str]
    [nextjournal.clerk :as clerk]
    [util :as u]))
 
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "01" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
@@ -25,6 +27,7 @@
 ;; Great! We now have our list of numbers, and as both parts are the same it's
 ;; simply a case of treating that list slightly differently.
 ;;
+;; ## Part 1
 ;; For part 1, we just care about the biggest number
 
 {:nextjournal.clerk/visibility {:result :hide}}
@@ -36,6 +39,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; But what's that "transducer" thing?
 ;;
 ;; So, there's two kinds of sequences (for our argument's sake); eager and lazy.

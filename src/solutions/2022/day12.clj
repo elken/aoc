@@ -1,12 +1,12 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day12
+  {:nextjournal.clerk/toc true}
   (:require [clojure.java.io :as io]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.string :as str]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
-
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "12" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
@@ -23,6 +23,7 @@
 ;;
 ;; Ended up borrowing a lot of code from [Day 8](https://elken.github.io/aoc/src/solutions/2022/day08.html) which helped.
 
+;; ## Convert elevation to height
 ;; First we need a function to convert a character to a "height" value, which
 ;; mostly boils down to the char code; with the `S`tart and `E`nd values being
 ;; `0` and `25` respectively.
@@ -33,6 +34,7 @@
     \E 25
     (- (int elevation) (int \a))))
 
+;; ## Convert a range to co-ordinates
 ;; Similar to [Day 8](https://elken.github.io/aoc/src/solutions/2022/day08.html), we parse the
 ;; list of values into a map that looks like
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
@@ -55,6 +57,7 @@
                 str/split-lines                               ;; Split into lines
                 range->coords))                               ;; Parse to matrix
 
+;; ## Find shortest path
 ;; The main "computation" function that uses a [PersistentQueue](https://github.com/danielmiladinov/joy-of-clojure/blob/master/src/joy-of-clojure/chapter5/how_to_use_persistent_queues.clj)
 ;; that I was lucky enough to have a physical copy of the associated book in front of me.
 ;;
@@ -71,18 +74,19 @@
       (if (= to node)
         (seen node)
         (let [neighbours (->> neighbour
-                             (for [direction [[-1 0] [1 0] [0 -1] [0 1]]
-                                   :let [neighbour (mapv + node direction)]
-                                   :when (and (input neighbour)
-                                              (not (seen neighbour))
-                                              (not (.contains neighbour unvisited))
-                                              (>=
-                                               (:elevation (input node))
-                                               (dec (:elevation (input neighbour)))))])
-                             vec)]
+                              (for [direction [[-1 0] [1 0] [0 -1] [0 1]]
+                                    :let [neighbour (mapv + node direction)]
+                                    :when (and (input neighbour)
+                                               (not (seen neighbour))
+                                               (not (.contains neighbour unvisited))
+                                               (>=
+                                                (:elevation (input node))
+                                                (dec (:elevation (input neighbour)))))])
+                              vec)]
           (recur (into (pop unvisited) neighbours)
                  (merge seen (zipmap neighbours (repeat (inc (seen node)))))))))))
 
+;; ## Find all characters
 ;; Lastly we need a small helper method to give us the locations of all
 ;; instances of a given set of characters
 (defn find-chars [input & chars]
@@ -90,6 +94,7 @@
    (first ((juxt filter remove)
            (fn [[_ v]] (.contains chars (:char v))) input))))
 
+;; ## Part 1
 ;; Part 1 is just a simple case of finding the path from `S` to `E`
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn part-1
@@ -103,6 +108,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; Part 2 is a little bit more involved, now we have to also consider all `a`
 ;; paths as well as `S`, but as above we lucked out and got this part for free.
 {:nextjournal.clerk/visibility {:code :show :result :hide}}

@@ -1,17 +1,19 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day02
+  {:nextjournal.clerk/toc true}
   (:require
    [clojure.java.io :as io]
    [clojure.string :as str]
    [nextjournal.clerk :as clerk]
    [util :as u]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "02" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
+;;
 ;; Ok, so we have to first compute the scores for a given set of rock, paper,
 ;; scissors games; then we have to estimate the result given the guide telling
 ;; us how to play.
@@ -24,6 +26,7 @@
 (def input (->> (slurp (io/resource "inputs/2022/day02.txt")) ;; Load the resource
                 (str/split-lines)))                           ;; Split into lines
 
+;; ## Scores
 ;; As mentioned above, we can compute a simple lookup table of all the results
 ;; for all games.
 ;;
@@ -40,6 +43,7 @@
              "C Y" 2   ;; Scissors, Paper
              "C Z" 6}) ;; Scissors, Scissors
 
+;; ## Results
 ;; Similarly for the second part, based on the expected result we can compute
 ;; what the score would be
 (def results {"A X" 3   ;; Scissors, Lose
@@ -52,6 +56,8 @@
               "C Y" 6   ;; Scissors, Draw
               "C Z" 7}) ;; Rock, Win
 
+;; ## Part 1
+;;
 ;; Now it's just a simple case of transducing the map of scores over the input
 ;; and summing them
 {:nextjournal.clerk/visibility {:result :hide}}
@@ -63,6 +69,8 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
+;;
 ;; Exactly the same for part 2, just with a different map
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
 (defn part-2

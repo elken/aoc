@@ -1,18 +1,19 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day04
+  {:nextjournal.clerk/toc true}
   (:require
    [clojure.java.io :as io]
    [clojure.set :as set]
    [clojure.string :as str]
    [nextjournal.clerk :as clerk]
    [util :as u]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "04" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; So, at first this problem seems quite complex. Overlapping co-ordinates? Okay
 ;; so we need to create some kind of tree? Maybe try and plot a line?
 ;;
@@ -24,9 +25,10 @@
 ;; Slightly different this time since we need a couple of functions to
 ;; efficiently setup our input; we have a few utility functions first.
 ;;
-;; #### Inclusive range
+;; ## Inclusive range
 ;;
-;; By default, the range function is exclusive on the end. That means we miss out on the upper bound, no es bueno.
+;; By default, the range function is exclusive on the end. That means we miss
+;; out on the upper bound, no es bueno.
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn inclusive-range [start end]
   (range start (inc end)))
@@ -36,7 +38,7 @@
 (range 1 5)
 (inclusive-range 1 5)
 
-;; #### Group co-ordinates
+;; ## Group co-ordinates
 ;; Given a line of input `2-4,5-8`, create a 2-tuple list of all the numbers, e.g. `((2 4) (5 8))`
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn group-coords [coord]
@@ -46,7 +48,7 @@
 {:nextjournal.clerk/visibility {:result :show}}
 (group-coords "2-4,5-8")
 
-;; #### Convert a 2-tuple co-ordinate into ranges
+;; ## Convert a 2-tuple co-ordinate into ranges
 ;; Compute the two ranges from the result of the previous function
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn coord->ranges [coord]
@@ -56,7 +58,7 @@
 {:nextjournal.clerk/visibility {:result :show}}
 (map coord->ranges (group-coords "2-4,5-8"))
 
-;; #### Create the sets
+;; ## Create the sets
 ;; Now, we can at last use the previous steps to create our sets.
 ;;
 ;; These have to be sets as the `clojure.set` functions expect both arguments to
@@ -91,6 +93,7 @@
                    (filter true?)
                    (map {false 0 true 1})) + 0 input))
 
+;; ## Part 1
 ;; Part 1 wants us to check if one set contains the other, so we can just do `set/subset?`
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn part-1
@@ -101,6 +104,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; Part 2 wants us to check if there's _any_ overlap; which in set terms is just
 ;; "check for an intersection".
 ;;

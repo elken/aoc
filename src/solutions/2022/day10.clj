@@ -1,16 +1,17 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day10
+  {:nextjournal.clerk/toc true}
   (:require [clojure.java.io :as io]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.string :as str]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "10" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; Back to simplicity! This one was cake, I think I spent longer doing the fancy
 ;; viewer for part 2 than I did actually solving the damn thing...
 ;;
@@ -35,12 +36,14 @@
                 str/split-lines                                                             ;; Split into lines
                 (mapcat #(if-let [step (re-find #"-*\d+" %)] [0 (parse-long step)] [0]))))  ;; Parse commands to numbers
 
+;; ## Compute pixels
 ;; The only "helper" method here, since both parts revolve around handling this
 ;; slightly differently, but in reality all we're doing here is updating the
 ;; value of `X` based on the value from the input tape
 (defn compute-pixels [input]
   (reduce #(conj %1 (+ (last %1) %2)) [1] input))
 
+;; ## Part 1
 ;; Part 1 is just getting the state of `X` at specific points, multiplying by
 ;; that step count and summing all those values.
 ;;
@@ -55,6 +58,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; Part 2 is the infamous "drawing" answer, which has been spiced up here via a nifty clerk viewer.
 ;;
 ;; This part took me _many_ read attempts, but we're basically checking for if
@@ -71,7 +75,6 @@
        (map (partial apply str))))
 
 ;; Which gives our answer
-{:nextjournal.clerk/visibility {:code :hide :result :show}}
 ^::clerk/no-cache
 (clerk/with-viewer
   '(fn [result]
@@ -83,5 +86,3 @@
                                            :class (if (= "#" val) "bg-black dark:bg-white" "bg-white dark:bg-black")}]))
                    (clojure.string/join "\n" (map :nextjournal/value result)))])
   (part-2 input))
-
-;; Note: view the [raw code](https://github.com/elken/aoc/blob/master/src/solutions/2022/day10.clj) to see the code for the viewer

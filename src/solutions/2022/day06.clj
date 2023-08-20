@@ -1,16 +1,17 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day06
+  {:nextjournal.clerk/toc true}
   (:require [clojure.java.io :as io]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.string :as str]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "06" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; Our first whiplash moment of the year! Yesterday's problem was quite tricky, and this one is barely a few lines long...
 ;;
 ;; Not a _whole_ lot to say about this one, we create a sliding partition of the
@@ -25,6 +26,7 @@
                 (str/split-lines)                             ;; Split into lines
                 first))                                       ;; Only a single line this time
 
+;; ## Find the repeating characters
 ;; Next, let's create a function to handle everything really.
 ;;
 ;; Given an input string and a defined length, create a partition that looks like
@@ -42,6 +44,7 @@
         (+ index length)
         (recur (inc index))))))
 
+;; ## Part 1
 ;; Both parts differ only on length, so we can trivially define part 1
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn part-1
@@ -52,6 +55,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; And finally part 2
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
 (defn part-2

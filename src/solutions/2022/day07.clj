@@ -1,18 +1,18 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day07
+  {:nextjournal.clerk/toc true}
   (:require [clojure.java.io :as io]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.core.match :as match]
             [clojure.string :as str]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
-
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "07" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; Another whiplash back to difficulty. This one stumped me for a little bit,
 ;; took a while to have the sizes compute recursively cleanly. But we made it,
 ;; so let's run through everything.
@@ -30,6 +30,8 @@
 (def input (->> (slurp (io/resource "inputs/2022/day07.txt")) ;; Load the resource
                 (str/split-lines)))                            ;; Split into lines
 
+;; ## Compute current stack size
+;;
 ;; A helper function to help compute the meat of the problem.
 ;;
 ;; Given the current directory stack and a size, recurse calling with an empty size map and parsing the size.
@@ -58,6 +60,8 @@
               ["dir <dir>" "Do nothing. Also a trap, since we need to see what's in the directory"]
               ["<size> <file>" "Compute the size given the current directory stack"]])
 
+;; ## Compute all sizes
+;;
 ;; The table above summarises the match conditions, the bulk of the work happens
 ;; when we find a file with a size. The size of the file is computed and merged
 ;; into the size map, along with anything else in the current directory stack.
@@ -75,6 +79,7 @@
           [(:or ["$" "ls"] ["dir" _])]      (recur size-map dir-stack rst)
           [[val _]]                         (recur (merge-with + size-map (compute-size dir-stack val)) dir-stack rst))))))
 
+;; ## Part 1
 ;; Part 1 is just a case of getting all the directories with a size less than
 ;; 100kb and summing the sizes.
 ;;
@@ -92,6 +97,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; Part 2 we have to find the smallest directory that when deleted frees up
 ;; enough space.
 ;;

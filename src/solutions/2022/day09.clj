@@ -1,19 +1,19 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day09
+  {:nextjournal.clerk/toc true}
   (:require
    [clojure.java.io :as io]
    [clojure.math :as math]
    [clojure.string :as str]
    [nextjournal.clerk :as clerk]
    [util :as u]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
-
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "09" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; From spotting trees to rope physics! Can't see these problems are dull at
 ;; least...
 ;;
@@ -44,6 +44,7 @@
 ;; Smashing. Now we have a flat input, it's just a case of reducing over it to
 ;; advance the state.
 
+;; ## Move the head
 ;; Next we define a function to move the head of the rope. Since we have
 ;; single-step movements now, we can just use `inc` and `dec`.
 {:nextjournal.clerk/visibility {:result :hide}}
@@ -54,7 +55,8 @@
     "L" [x (dec y)]
     "D" [(inc x) y]))
 
-;; Then we have a function to mvoe the tail of the rope.
+;; ## Move the tail
+;; Then we have a function to move the tail of the rope.
 ;;
 ;; This handles all our rules, ensuring that the tail is always at least next to
 ;; the head by updating the co-ordinate using `clojure.math/signum` to return
@@ -68,6 +70,7 @@
       [tail-x tail-y]
       [(+ tail-x (math/signum dx)) (+ tail-y (math/signum dy))])))
 
+;; ## Calculate a full movement
 ;; Next we have a function to perform a movement command given a rope vector
 ;; (more on that in the next function) and a single-step movement command.
 ;;
@@ -84,6 +87,7 @@
         (= index 0) (recur (assoc ropes index (move-head (ropes index) direction)) next-pos)
         :else (recur (assoc ropes index (move-tail (ropes (dec index)) (ropes index))) next-pos)))))
 
+;; ## Calculate all the movements
 ;; Lastly we have a general solution for both parts, since they share a common
 ;; _thread_ (I'm here all week) in that part 1 has 2 knots and part 2 has 10
 ;; knots, so we can abstract the implementation to use a vector instead and act
@@ -103,6 +107,7 @@
         (count tails)
         (recur (move rope-vec cmd) tails rst)))))
 
+;; ## Part 1
 ;; As above, part 1 is just 2 knots
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn part-1
@@ -113,6 +118,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; And part 2 is _10_ knots
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
 (defn part-2

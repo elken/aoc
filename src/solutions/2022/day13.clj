@@ -1,18 +1,18 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day13
+  {:nextjournal.clerk/toc true}
   (:require
    [clojure.edn :as edn]
    [clojure.java.io :as io]
    [nextjournal.clerk :as clerk]
    [util :as u]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
-
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "13" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; Finally, a day built for clojure! As soon as I saw this problem, I was
 ;; rubbing my hands with glee; thanks to `clojure.edn/read-string`. With it, we
 ;; don't need any parsing logic at all and we can simply just load the input and
@@ -30,6 +30,7 @@
 ;; that are already sorted; whereas part 2 asks you to sort the input data and
 ;; muliply the indexes of where `[2]` and `[6]` would appear.
 ;;
+;; ## Parse input
 ;; First things first, let's load our input and parse it. All we need is this
 ;; simple function and we have a vector of all our input
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
@@ -40,6 +41,7 @@
 (def input (->> (slurp (io/resource "inputs/2022/day13.txt")) ;; Load the resource
                 parse-input))                                 ;; Parse the input into a vector of vectors
 
+;; ## Com_pair_ two lists
 ;; Next we have our pun-named pair compare function.
 ;;
 ;; Given the two lists, check if any are numbers and `compare` the ints or
@@ -59,6 +61,7 @@
 
 ;; That's all we need!
 ;;
+;; ## Part 1
 ;; Part 1 we simply `reduce` over the partitioned input
 ;; (giving us our `left` and `right` to compare) verifying the list is sorted.
 ;; If it is, we add the index to the total plus 1 (0-indexing) and return it.
@@ -77,6 +80,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; For part 2, we have to do things slightly differently. Here we're tasked with
 ;; sorting the list of input & so-called "divider packets" and then locating
 ;; where `[2]` and `[6]` would appear.

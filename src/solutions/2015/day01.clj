@@ -1,16 +1,17 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2015.day01
+  {:nextjournal.clerk/toc true}
   (:require [clojure.java.io :as io]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.string :as str]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "01" "2015"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;;
 ;; Well, here we are! The first ever Advent of Code!
 ;;
@@ -34,7 +35,8 @@
                 vec))           ;; Split into a list
 
 ;; Our "solver" function takes the input vector of the brackets and computes the
-;; output path; optionally short-circuiting if you pass in a limit.
+;; output path; optionally short-circuiting if you pass in a limit. `reduce-kv`
+;; is used here as a lazy way to get the position as we go.
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn- compute-path
   ([input]
@@ -48,7 +50,8 @@
     0
     input)))
 
-;; Running that gives us
+;; ## Part 1
+;; Part 1 just wants us to compute the result, so we can just run like this
 (defn part-1
   [input]
   (compute-path input))
@@ -59,6 +62,11 @@
 
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
 
+;; ## Part 2
+;; For part 2 we have to do something slightly different, and print the position
+;; of the first character where the point is in the "basement"; in other words
+;; when the count is -1. So we add an optional limit argument and call `reduced`
+;; when we hit it.
 (defn part-2
   [input]
   (compute-path input -1))

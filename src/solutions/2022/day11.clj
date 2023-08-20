@@ -1,19 +1,19 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day11
+  {:nextjournal.clerk/toc true}
   (:require [clojure.java.io :as io]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.string :as str]
             [clojure.core.match :as match]
             [clojure.math :as math]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
-
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "11" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; Seems as if the Advent of Code Gods are nice to us on weekends, this one was
 ;; _relatively_ simple and quite fun. As is the case with these kinds of
 ;; puzzles, it took me longer to parse the input than to solve it.
@@ -35,6 +35,7 @@
 ;; on that in part 2). After a round, multiply the two biggest inspection totals
 ;; and that's the answer.
 ;;
+;; ## Parse a monkey
 ;; First things first, let's load our input and parse it
 ;;
 ;; This is probably bordering in the edge of needing something like
@@ -72,7 +73,8 @@
                 (mapv parse-monkey)))                         ;; Parse the monkey lines and return a vector (needed for `assoc`)
 
 ;; Great, we have our vector of initial monkeys!
-;;
+
+;; ## Compute an inspection
 ;; Next, we need to compute the inspection.
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn inspect [monkey inspect-fn item]
@@ -91,6 +93,7 @@
              (:on-false (first input)))
           (map (partial inspect (first input) (fn [old] (/ old 3))) (:items (first input))))
 
+;; ## Move items for monkeys
 {:nextjournal.clerk/visibility {:result :hide}}
 ;; Lastly we reduce over the list of monkeys and update the items to reflect
 ;; changes, as well as update the inspection counts
@@ -108,6 +111,7 @@
                            (assoc monkey-idx (assoc monkey :items [] :inspected (+ (:inspected monkey) (count (:items monkey))))))))
                    monkeys)))))
 
+;; ## Advance a round
 ;; Nearly there now, here we create a function to advance a single round.
 ;;
 ;; By that, I mean we go through each monkey and apply all the movement commands
@@ -117,11 +121,13 @@
           monkeys
           (range 0 (count monkeys))))
 
+;; ## Advance all rounds
 ;; Next we advance rounds by creating an infinite sequence of all possible
 ;; rounds and returning the round we care about
 (defn advance-rounds [n inspect-fn input]
   (nth (iterate (partial advance-round inspect-fn) input) n))
 
+;; ## Compute the score
 ;; Lastly since both parts are identical, we can use a general compute function
 ;; to handle both
 (defn compute-score [n inspect-fn input]
@@ -131,6 +137,7 @@
        (take-last 2)
        (apply *)))
 
+;; ## Part 1
 ;; Now the parts!
 ;;
 ;; Part 1 runs for 20 rounds and takes the `/ 3` function during the inspect
@@ -144,6 +151,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; Part 2 runs for _10,000_ rounds and takes what looks like dark magic during
 ;; the inspect step.
 ;;

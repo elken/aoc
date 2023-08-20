@@ -1,18 +1,19 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day03
+  {:nextjournal.clerk/toc true}
   (:require
    [clojure.java.io :as io]
    [clojure.set :as set]
    [clojure.string :as str]
    [nextjournal.clerk :as clerk]
    [util :as u]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "03" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
+;; # Solution
 ;; Ok, we're getting to a more meaty problem now.
 ;;
 ;; This time around, we're doing string manipulation and set operations. Given a
@@ -28,7 +29,7 @@
 
 ;; Next we have to create a couple of utility functions to help us solve this.
 ;;
-;; #### Parsing priority
+;; ## Parsing priority
 ;; Given an item `[a-zA-z]`, get the ascii code and subtract the relevant
 ;; amount. Another potential here would be a `zipmap` of all the letters and
 ;; indexes.
@@ -43,7 +44,7 @@
 {:nextjournal.clerk/visibility {:result :show}}
 (get-priority \A)
 
-;; #### Splitting a rucksack
+;; ## Splitting a rucksack
 ;; Given a "rucksack" (a line of input), split down the middle and return as a
 ;; list
 {:nextjournal.clerk/visibility {:result :hide}}
@@ -54,7 +55,7 @@
 {:nextjournal.clerk/visibility {:result :show}}
 (split-rucksack "vJrwpWtwJgWrhcsFMMfFFhFp")
 
-;; #### Get the duplicates
+;; ## Get the duplicates
 ;; Given a list of rucksacks, convert them to sets and apply `set/intersection`
 ;; on them. For the purposes of this assignment, this always returns a single
 ;; element so we can "cheat" and just call `first`.
@@ -66,6 +67,7 @@
 {:nextjournal.clerk/visibility {:result :show}}
 (check-items (split-rucksack "vJrwpWtwJgWrhcsFMMfFFhFp"))
 
+;; ## Part 1
 ;; Now we can run part 1! This is now a good usage of a transducer, as we can
 ;; apply a single function to every line _and_ keep track of the result of the
 ;; reduction.
@@ -88,6 +90,7 @@
 (check-items (split-rucksack (first input)))
 (get-priority (check-items (split-rucksack (first input))))
 
+;; ## Part 2
 ;; Part 2 is only _slightly_ different; the grouping is now vertical rather than
 ;; horizontal. So we partition the input into groups of 3 and then handle it
 ;; exactly the same as part 1, minus the string splitting.

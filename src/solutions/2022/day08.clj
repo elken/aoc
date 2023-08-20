@@ -1,12 +1,12 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day08
+  {:nextjournal.clerk/toc true}
   (:require [clojure.java.io :as io]
             [util :as u]
             [nextjournal.clerk :as clerk]
             [clojure.string :as str]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
 
-
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "08" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
@@ -20,6 +20,7 @@
 ;; least one direction (visibility here being whether or not a tree has the
 ;; largest height to a given edge).
 ;;
+;; ## Convert range to co-ordinates
 ;; First things first, let's load our input and parse it
 ;;
 ;; We have to use a function to create the map format we need to solve this
@@ -53,6 +54,7 @@
 ;; We made a guess that part 2 wouldn't involve diagonals, and we called it!
 (def directions [[-1 0] [1 0] [0 -1] [0 1]])
 
+;; ## Compute trees
 ;; Then we compute all the trees from a given tree to the edge in a given direction.
 ;;
 ;; Given the coordinate list, a tree to compute from and a direction vector;
@@ -61,11 +63,13 @@
   (let [[_ & trees] (map coords (iterate (partial mapv + direction) tree))]
     (take-while some? trees)))
 
+;; ## Check visibility
 ;; Compute in all directions if a tree can see an edge in a given direction.
 (defn visible?
   [coords tree]
   (some #(every? (partial > (coords tree)) (trees-in coords tree %)) directions))
 
+;; ## Compute viewing distance
 ;; Compute the viewing distance; that is how many trees the current tree can see.
 (defn viewing-distance
   [coords tree]
@@ -77,6 +81,7 @@
    *
    directions))
 
+;; ## Part 1
 ;; That's everything! Now we can run through part 1. Here, all we care about is
 ;; how many trees can see an edge. A simple count of all the trees that have a
 ;; visible edge.
@@ -92,6 +97,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; Part 2 is a bit more involved, now we have to find the most scenic tree by
 ;; multiplying together all the viewing distances and finding the biggest
 ;; number.

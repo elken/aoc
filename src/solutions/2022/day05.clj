@@ -1,19 +1,20 @@
 ^{:nextjournal.clerk/visibility :hide-ns}
 (ns solutions.2022.day05
-    (:require
-     [clojure.java.io :as io]
-     [clojure.string :as str]
-     [nextjournal.clerk :as clerk]
-     [util :as u]))
-{:nextjournal.clerk/visibility {:code :show :result :show}}
+  {:nextjournal.clerk/toc true}
+  (:require
+   [clojure.java.io :as io]
+   [clojure.string :as str]
+   [nextjournal.clerk :as clerk]
+   [util :as u]))
 
-
+;; # Problem
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (clerk/html (u/load-problem "05" "2022"))
 {:nextjournal.clerk/visibility {:code :show :result :show}}
 
-;; ## Solution
-;; Things are starting to get challenging now! This one took me a bit longer, mostly because of silly parsing bugs.
+;; # Solution
+;; Things are starting to get challenging now! This one took me a bit longer,
+;; mostly because of silly parsing bugs.
 ;;
 ;; This time around we're given a 2-part input; an ascii diagram of the initial
 ;; state and a set of commands to apply to advance the state. Both parts are
@@ -29,6 +30,7 @@
 ;; This gives us a 2-tuple of the unparsed initial board state and all the
 ;; movement commands we'll need.
 
+;; ## Parsing bins
 ;; Next, parsing the ascii diagram into a useful data structure. Making them
 ;; into a nice matrix would almost trivialise the movement commands later. What
 ;; can we do there...
@@ -50,18 +52,19 @@
 (defn parse-bins [input]
   (vec
    (apply map (comp vec reverse #(remove nil? %) list)
-         (let [bins (first input)]
-           (for [line bins
-                 :when (str/includes? line "[")]
-             (let [tokens (partition 3 4 (str/split line #""))
-                   chars (map #(keep (partial re-find #"\w") %) tokens)]
-               (map first chars)))))))
+          (let [bins (first input)]
+            (for [line bins
+                  :when (str/includes? line "[")]
+              (let [tokens (partition 3 4 (str/split line #""))
+                    chars (map #(keep (partial re-find #"\w") %) tokens)]
+                (map first chars)))))))
 
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (parse-bins input)
 
 ;; Much better!
 
+;; ## Moving creates
 ;; Now we have to parse a movement command, e.g. "move 4 from 9 to 6".
 ;;
 ;; This can be parsed simply by getting all the numbers and using those
@@ -86,6 +89,7 @@
 
 ;; See how the crates moved?
 
+;; ## Processing commands
 ;; Last step now is creating a generalised wrapper function, as both parts are
 ;; solved in exactly the same way just differing slightly.
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
@@ -94,6 +98,7 @@
                                (parse-bins input)
                                (last input)))))
 
+;; ## Part 1
 ;; Now we can run part 1, passing `reverse` to reverse the crate order
 {:nextjournal.clerk/visibility {:result :hide}}
 (defn part-1
@@ -104,6 +109,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-1 input)
 
+;; ## Part 2
 ;; And part 2, passing `identity` to just return the crates as-is
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
 (defn part-2
