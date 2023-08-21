@@ -50,8 +50,10 @@
 (clerk/html
  (into [:div]
        (mapv (fn [[year paths]]
-               [:section
-                [:h1 year]
+               [:details
+                [:summary
+                 [:span.text-2xl.font-bold year]
+                 [:span.ml-10 (format "(%s solutions)" (count paths))]]
                 (into [:ul]
                       (mapv (fn [path]
                               (when-let [day (second (re-matches #".*day(\d+).clj" path))]

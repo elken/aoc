@@ -4,8 +4,7 @@
    [hickory.core :as h]
    [hickory.render :as hr]
    [hickory.select :as s]
-   [babashka.fs :as fs]
-   [clojure.string :as str]))
+   [babashka.fs :as fs]))
 
 (defn load-problem
   "Given a DAY and a YEAR, cache the problem definition locally. If `AOC_TOKEN`
@@ -30,6 +29,7 @@
   [day year]
   (let [day (str (parse-long day))
         file-name (format "day%s-%s.html" day year)
+        _ (load-problem day year)
         path (fs/path (fs/temp-dir) file-name)
         doc (h/as-hickory (h/parse (slurp (str path))))
         parts (map #(hr/hickory-to-html %) (s/select (s/child (s/tag :h2)) doc))]
