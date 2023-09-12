@@ -3,7 +3,7 @@
 #+date: \today
 #+latex_class: chameleon
 
-[[https://github.com/elken/aoc/actions/workflows/test.yml][https://github.com/elken/aoc/actions/workflows/test.yml/badge.svg]]
+[[https://github.com/elken/aoc/actions/workflows/deploy.yml][https://github.com/elken/aoc/actions/workflows/deploy.yml/badge.svg]]
 
 A repo containing all my advent of code solutions; built in Clerk.
 
