@@ -16,7 +16,8 @@
                                       path (fs/path (run '-input-dir) year)
                                       file-name (format "day%02d.txt" (Integer/parseInt day))
                                       url (format "https://adventofcode.com/%s/day/%s/input" year day)
-                                      resp (curl/get url {:headers {"Cookie" (str "session=" (System/getenv "AOC_TOKEN"))}})]
+                                      resp (curl/get url {:headers {"Cookie" (str "session=" (System/getenv "AOC_TOKEN"))
+                                                                    "User-Agent" (System/getenv "AOC_USER_AGENT")}})]
                                   (when-not (fs/exists? path)
                                     (fs/create-dir path))
                                   (spit (str (fs/path path file-name)) (:body resp)))}
