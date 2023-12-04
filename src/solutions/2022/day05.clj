@@ -119,3 +119,63 @@
 ;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 (part-2 input)
+
+;; # Custom Viewer
+;;
+;; I assume you came from [the blog](https://www.juxt.pro/blog/advanced-clerk-usage) about this, but here's the live version!
+{:nextjournal.clerk/visibility {:code :hide :result :hide}}
+(def steps
+  (reductions (partial move-crates identity)
+              (parse-bins input)
+              (last input)))
+
+{:nextjournal.clerk/visibility {:code :show :result :hide}}
+(def crates-viewer
+  {:transform-fn clerk/mark-presented
+   :render-fn
+   '(fn [steps]
+      (defn transpose-matrix [m]
+        (let [max-len (apply max (mapv count m))
+              padded-matrix (mapv #(concat % (repeat (- max-len (count %)) nil)) m)]
+          (apply map (comp (partial remove nil?) vector) padded-matrix)))
+
+      (reagent.core/with-let
+        [reverse? (reagent.core/atom true)
+         step (reagent.core/atom (first steps))
+         ref (clojure.core/atom nil)]
+        [:div.flex.justify-between.flex-col.overflow-none
+         [:h1 (str "Step " (inc (.indexOf steps @step)) "/" (count steps))]
+         [:div.flex.space-x-2.items-center
+          [:label.font-bold {:for "is-reverse"} "Reverse?"]
+          [:input {:type :checkbox
+                   :id "is-reverse"
+                   :checked @reverse?
+                   :on-change #(reset! reverse? (.. % -target -checked))}]]
+         [:p "Move the slider to adjust the step. To make it easier, the 'top' crate is highlighted in yellow (since it'll be different when reversed!)"]
+         [:input {:type :range
+                  :value (.indexOf steps @step)
+                  :max (dec (count steps))
+                  :on-input #(do
+                               (when @ref
+                                 (set! (.-scrollTop @ref) (.-scrollHeight @ref)))
+                               (reset! step (nth steps (.. % -target -valueAsNumber))))}]
+         [:div.bg-white.overflow-y-auto.mt-4
+          {:class "max-h-[20rem]"
+           :ref (partial reset! ref)}
+          (into
+           [:div.grid.bg-white.overflow-y
+            {:style
+             {:grid-template-columns (str "repeat(" (count @step) ", minmax(0, 1fr))")}}]
+           (for [row (map (if @reverse? reverse identity) @step)]
+             (into
+              [:div.flex.flex-col.justify-end]
+              (for [crate row]
+                [:div.border-2.p-2.text-black.text-center.shadow-lg.bg-gray-200.border-gray-400
+                 {:class (if @reverse? "first:border-yellow-400" "last:border-yellow-400")}
+                 crate]))))]]))})
+
+;; Which looks like
+
+{:nextjournal.clerk/visibility {:code :hide :result :show}}
+^{::clerk/sync true ::clerk/no-cache true}
+(clerk/with-viewer crates-viewer steps)
