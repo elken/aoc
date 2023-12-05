@@ -22,17 +22,19 @@
                                     (fs/create-dir path))
                                   (spit (str (fs/path path file-name)) (:body resp)))}
          new-day {:doc "Create the next day from the template."
-                  :depends [-download-input]
                   :task (let [[day year] (run '-parse-day-args)
                               day (format "%02d" (Integer/parseInt day))
                               template (run '-load-template)
                               path (fs/path "src" "solutions" year)
                               file-name (format "day%s.clj" day)]
-                          (print (format "Creating template for %s/%s" day year))
+                          (println (format "Creating template for %s/%s" day year))
 
                           ;; Create the year path if missing
                           (when-not (fs/exists? path)
                             (fs/create-dir path))
+
+                          (when-not (fs/exists? (fs/path (run '-input-dir)) year)
+                            (run '-download-input))
 
                           (spit
                            (str (fs/path path file-name))
