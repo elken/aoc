@@ -1,0 +1,3 @@
+[submodule "resources/inputs"]
+	path = resources/inputs
+	url = git@github.com:elken/aoc-inputs
