@@ -1,7 +1,8 @@
-/.clj-kondo/
-/.cpcache/
-/.lsp/
-/.nrepl-port
-/.envrc
-/.clerk/
+.clj-kondo/
+.cpcache/
+.lsp/
+.nrepl-port
+.envrc
+.env
+.clerk/
 /public/
