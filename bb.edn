@@ -13,6 +13,7 @@
                                     2 [(first *command-line-args*) (second *command-line-args*)]
                                     [day year]))}
          -download-input {:task (let [[day year] (run '-parse-day-args)
+                                      dir (run '-input-dir)
                                       path (fs/path (run '-input-dir) year)
                                       file-name (format "day%02d.txt" (Integer/parseInt day))
                                       url (format "https://adventofcode.com/%s/day/%s/input" year day)
@@ -20,7 +21,10 @@
                                                                     "User-Agent" (System/getenv "AOC_USER_AGENT")}})]
                                   (when-not (fs/exists? path)
                                     (fs/create-dir path))
-                                  (spit (str (fs/path path file-name)) (:body resp)))}
+                                  (spit (str (fs/path path file-name)) (:body resp))
+                                  (shell {:dir dir} "git" "add" ".")
+                                  (shell {:dir dir} "git" "commit" "-m" (format "Add %s/%s" day year))
+                                  (shell {:dir dir} "git" "push" "origin" "HEAD:master"))}
          new-day {:doc "Create the next day from the template."
                   :task (let [[day year] (run '-parse-day-args)
                               day (format "%02d" (Integer/parseInt day))
@@ -33,7 +37,7 @@
                           (when-not (fs/exists? path)
                             (fs/create-dir path))
 
-                          (when-not (fs/exists? (fs/path (run '-input-dir)) year)
+                          (when-not (fs/exists? (fs/path (run '-input-dir) year (format "day%s.txt" day)) year)
                             (run '-download-input))
 
                           (spit
