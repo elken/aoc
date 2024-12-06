@@ -27,21 +27,20 @@
 ;;
 ;; First things first, let's load our input and parse it
 ;;
-;; We bring back the good old function to parse the input into a grid,
-;; this time using `map-indexed` to be slightly neater.
+;; We bring back the good old function to parse the input into a matrix of coords
 {:nextjournal.clerk/visibility {:result :hide}}
-(defn parse-grid [input]
-  (->> input
-       clojure.string/split-lines
-       (map-indexed (fn [y row]
-                      (map-indexed (fn [x ch] [[x y] ch]) row)))
-       (apply concat)
-       (into {})))
+(defn range->coords
+  [matrix]
+  (into {}
+        (for [x (range (count matrix))
+              y (range (count (first matrix)))]
+          [[x y] (str (get (get matrix x) y))])))
 {:nextjournal.clerk/visibility {:result :show}}
 
 ;; Then we parse
 (def input (->> (slurp (io/resource "inputs/2024/day04.txt")) ;; Load the resource
-                parse-grid))                                  ;; Parse into a grid
+                str/split-lines                               ;; Split into lines
+                range->coords))                               ;; Parse into a grid
 
 ;; ## Functions
 ;; ### directions
