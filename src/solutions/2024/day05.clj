@@ -45,9 +45,15 @@
 (def input (-> (slurp (io/resource "inputs/2024/day05.txt")) ;; Load the resource
                (str/split #"\n\n")                           ;; Split in half
                parse-input))                                 ;; Parse into lines
-
+{:nextjournal.clerk/visibility {:result :hide}}
 
 ;; ## Functions
+;; ### pair-exists?
+;;
+;; Check the rules to see if we have a valid pair
+(defn pair-exists? [rules pair]
+  (some (partial = pair) rules))
+
 ;; ### ordered-update?
 ;;
 ;; We use this in both parts to determine if our lists are sorted or
@@ -57,21 +63,14 @@
 ;; In either case, we simply partition the list and check that every
 ;; partition equals a rule in the list of rules.
 (defn ordered-update? [rules update]
-  (every? (fn [pair] (some #(= pair %) rules)) (partition 2 1 update)))
+  (every? (partial pair-exists? rules) (partition 2 1 update)))
 
 ;; ### middle-number
 ;;
 ;; Given a list of all the numbers, get the number that's in the
 ;; middle.
-(defn middle-number [ns]
-  (nth ns (math/floor (/ (count ns) 2))))
-
-;; ### less-than?
-;;
-;; Use the rules to determine if we have a rule to say if a is "less
-;; than" b.
-(defn less-than? [rules a b]
-  (contains? (into #{} rules) [a b]))
+(defn middle-number [update]
+ (nth update (quot (count update) 2)))
 
 ;; ### quick-select
 ;;
@@ -113,14 +112,14 @@
 ;; the new position, since we're not checking `less` or `equal`
 ;; anymore.
 (defn quick-select [rules k [pivot :as update]]
-  (let [less (filterv #(less-than? rules % pivot) update)
+  (let [less (filterv #(pair-exists? rules [% pivot]) update)
         equal (count (filter #(= % pivot) update))]
     (cond
       (< k (count less)) (quick-select rules k less)
       (< k (+ (count less) equal)) pivot 
       :else (quick-select rules 
                           (- k (count less) equal)
-                          (filterv #(and (not (less-than? rules % pivot)) 
+                          (filterv #(and (not (pair-exists? rules [% pivot])) 
                                          (not= % pivot)) update)))))
 
 ;; ## Part 1
