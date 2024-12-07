@@ -133,14 +133,14 @@
 ;; We basically just walk the path as in part 1 but with an extra wall
 ;; in place, then follow it to see if we end up in a loop (by walking
 ;; the same as a previous path)
-(defn check-loop? [input pos]
-  (traverse (update input :walls conj pos) (:start input) true))
+(defn check-loop? [{:keys [start] :as input} pos]
+  (traverse (update input :walls conj pos) start true))
 
 ;; ## Part 1
 ;;
 ;; Part 1 has us just walk the path and count all the unique stops. Since we also use this info in part 2, we make the function return the data
-(defn part-1 [input]
-  (first (traverse input (:start input) false)))
+(defn part-1 [{:keys [start] :as input}]
+  (first (traverse input start false)))
 
 ;; Which gives our countable answer
 {:nextjournal.clerk/visibility {:code :show :result :show}}
