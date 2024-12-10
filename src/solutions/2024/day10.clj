@@ -35,8 +35,7 @@
   [matrix]
   (into {}
         (for [x (range (count matrix))
-              y (range (count (first matrix)))
-              :when (not= \. (get (get matrix x) y))]
+              y (range (count (first matrix)))]
           [[x y] (Character/digit (get (get matrix x) y) 10)])))
 
 (def input (->> (slurp (io/resource "inputs/2024/day10.txt")) ;; Load the resource
@@ -45,70 +44,56 @@
 {:nextjournal.clerk/visibility {:result :hide}}
 
 ;; ## Functions
-;; ### starting-points
-;;
-;; From the grid, get all the valid points we can start at (the
-;; zeroes)
-(defn starting-points [coords]
-  (->> coords
-       (filter #(zero? (second %)))
-       (map first)))
 
 ;; ### get-valid-neighbors
 ;;
 ;; From a point, get a vector of all the neighbors that meet the
 ;; conditions to be a valid next node. It should exist (duh) and it
 ;; should be equal to the current value + 1.
-(defn get-valid-neighbors [coords current]
+;;
+;; We use complex numbers here to simplify.
+(defn get-valid-neighbours [visited grid level]
   (reduce
-   (fn [neighbours point]
-     (let [next-point (map + current point)
-           next (get coords next-point)]
-       (if (and next
-                (= next (inc (get coords current))))
-         (conj neighbours next-point)
-         neighbours)))
+   (fn [acc [position d]]
+     (let [next (vec (map + position d))]
+       (if (= (grid next -1) level)
+         (conj acc next)
+         acc)))
    []
-   [[1 0] [-1 0] [0 1] [0 -1]]))
+   (for [position visited
+         direction [[1 0] [-1 0] [0 1] [0 -1]]]
+     [position direction])))
 
-;; ### paths-to-nine
+;; ### walk
 ;;
-;; From a starting point, find all the paths to a 9. We do this by
-;; walking the path recursively checking all valid neighbours and
-;; keeping track of where we've been and our current total so we can
-;; quit when we see a 9.
-(defn paths-to-nine
-  ([coords start]
-   (paths-to-nine coords start 0 #{start} #{}))
-  ([coords pos curr-val visited endpoints]
-   (if (= curr-val 9)
-     (conj endpoints pos)
-     (->> (get-valid-neighbors coords pos)
-          (reduce
-           #(paths-to-nine coords %2 (inc curr-val) (conj visited %2) %1)
-           endpoints)))))
+;; Walk each direction with valid neighbours until we find a 9, then
+;; recur until we find them all. Apply processing function `f` when we
+;; determine what the next set of coords should be.
+(defn walk [visited coords level f]
+  (let [next (f (get-valid-neighbours visited coords level))]
+    (if (or (empty? next) (= level 9))
+      (count next)
+      (recur next coords (inc level) f))))
 
-;; ### count-paths-from
+;; ### solve
 ;;
-;; The part 2 solver. Recurse through the path from each starting
-;; point and count any path to a 9.
-(defn count-paths-from [coords pos curr-val visited]
-  (if (= curr-val 9)
-    1
-    (->> (get-valid-neighbors coords pos)
-         (map #(count-paths-from coords % (inc curr-val) (conj visited %)))
-         (reduce + 0))))
+;; General solver since both parts work the same. Get all the starting
+;; points and walk them, applying our processing function `f` during
+;; `walk`. Then sum the results.
+(defn solve [input f]
+  (->> input
+       (filter (comp zero? val))
+       (map #(walk [(key %)] input 1 f))
+       (reduce +)))
 
 ;; ## Part 1
 ;;
-;; Part 1 wants us to count all the "trailheads"; that is all 9s
-;; that have a valid path from a 0.
+;; Part 1 wants us to count all the "trailheads"; that is all 9s that
+;; have a valid path from a 0 so we use `distinct` to get all the
+;; unique endpoints.
 (defn part-1
   [input]
-  (->> input
-       starting-points
-       (mapcat #(paths-to-nine input %))
-       count))
+  (solve input distinct))
 
 ;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
@@ -116,14 +101,12 @@
 
 ;; ## Part 2
 ;;
-;; Part 2 instead wants us to count all the paths to a trailhead.
+;; Part 2 instead wants us to count all the paths to a trailhead so we
+;; use `identity` to get all the paths.
 {:nextjournal.clerk/visibility {:code :show :result :hide}}
 (defn part-2
   [input]
-  (->> input
-       starting-points
-       (map #(count-paths-from input % 0 #{%}))
-       (apply +)))
+  (solve input identity))
 
 ;; Which gives our answer
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
