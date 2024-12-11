@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.2
         with:
           ssh-key: ${{ secrets.SSH_KEY }}
           submodules: true
 
       - name: 🔧 Install java
-        uses: actions/setup-java@v3.12.0
+        uses: actions/setup-java@v4.5.0
         with:
           distribution: "temurin"
           java-version: "11.0.20+8"
@@ -24,13 +24,13 @@ jobs:
       - name: 🔧 Install clojure
         uses: DeLaGuardo/setup-clojure@master
         with:
-          cli: "1.11.1.1403"
+          cli: "1.12.0.1488"
 
       - name: 🏗 Install deps
         run: yarn global add tailwindcss @tailwindcss/typography
 
       - name: Cache deps
-        uses: actions/cache@v3.3.1
+        uses: actions/cache@v4.2.0
         with:
           path: |
             ~/.m2
@@ -48,7 +48,7 @@ jobs:
           NODE_PATH=$(yarn global dir)/node_modules clojure -M:nextjournal/clerk
 
       - name: 🚀 Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.4.3
+        uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
           branch: gh-pages
           folder: public/build

@@ -1,12 +1,13 @@
 {:paths ["src" "resources"]
- :deps {org.clojure/clojure {:mvn/version "1.11.1"}
-        io.github.nextjournal/clerk {:git/sha "eb89e0b2e9edf8937c7c4a14c6df0ebc3217adeb"}
-        clj-http/clj-http {:mvn/version "3.12.3"}
-        org.clj-commons/hickory {:mvn/version "0.7.3"}
-        org.clojure/core.match {:mvn/version "1.0.1"}
-        org.babashka/cli {:mvn/version "0.7.52"}
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        io.github.nextjournal/clerk {:mvn/version "0.17.1102"}
+        clj-http/clj-http {:mvn/version "3.13.0"}
+        org.clj-commons/hickory {:mvn/version "0.7.5"}
+        org.clojure/core.match {:mvn/version "1.1.0"}
+        org.babashka/cli {:mvn/version "0.8.61"}
+        org.clojure/data.json {:mvn/version "2.5.1"}
         ;; silence log warnings
-        org.slf4j/slf4j-nop {:mvn/version "2.0.7"}}
+        org.slf4j/slf4j-nop {:mvn/version "2.0.16"}}
 
  :aliases {:nextjournal/clerk {:exec-fn nextjournal.clerk/build!
                                :jvm-opts ["-Dclojure.main.report=stdout"]
