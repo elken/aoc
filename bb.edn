@@ -9,6 +9,7 @@
                                       year (.format (java.text.SimpleDateFormat. "yyyy") now)
                                       day (.format (java.text.SimpleDateFormat. "d") now)]
                                   (condp = (count *command-line-args*)
+                                    0 [day year]
                                     1 [(first *command-line-args*) year]
                                     2 [(first *command-line-args*) (second *command-line-args*)]
                                     [day year]))}
