@@ -1,15 +1,23 @@
 (ns util
   (:require
+   [babashka.fs :as fs]
    [clj-http.client :as client]
+   [clojure.java.io :as io]
    [hickory.core :as h]
    [hickory.render :as hr]
    [hickory.select :as s]
-   [babashka.fs :as fs]))
+   [nextjournal.clerk.view :as clerk.view]))
 
 (defn load-problem
   "Given a DAY and a YEAR, cache the problem definition locally. If `AOC_TOKEN`
   is set correctly, this will pull both parts if you've done part 1."
   [day year]
+  (alter-var-root #'clerk.view/include-css+js
+                  (fn [include-css+js-orig extra-includes]
+                    (fn [state]
+                      (concat (include-css+js-orig state)
+                              extra-includes)))
+                  (list [:style#extra-styles (slurp (io/resource "style.css"))]))
   (let [day (str (parse-long day))
         file-name (format "day%s-%s.html" day year)
         path (fs/path (fs/temp-dir) file-name)]
