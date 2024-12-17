@@ -26,11 +26,11 @@
 ;;
 ;; What does this translate to mathematically?
 ;;
-;; $$94X + 34Y = 8400$$
+;; $94X + 34Y = 8400$
 ;;
-;; $$22X + 67Y = 5400$$
+;; $22X + 67Y = 5400$
 ;;
-;; $$X < 100, Y < 100$$
+;; $X < 100, Y < 100$
 ;;
 ;; We have to satisfy both equations and meet the constraints by
 ;; finding either the max value or the min value, in this case we're
@@ -82,7 +82,7 @@ x_2 = \\frac{\\det(a, c_1; x_2, c_2)}{\\det(a, b; x_2, y_2)} \\\\
 ;; If there is, then we can compute the integer coefficients `a` and
 ;; `b` that satisfy the equations. If they then meet the bounds we
 ;; define, then we can apply the simple formula for computing the
-;; total: $$3A + B$$
+;; total: $3A + B$
 (defn valid-solution?
   ([k [[ax ay] [bx by] [tx ty]]]
    (let [tx (+ tx k)

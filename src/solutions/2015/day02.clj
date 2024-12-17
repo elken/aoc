@@ -15,7 +15,7 @@
 ;;
 ;; Not much difficulty here, just not much to make generic.
 ;;
-;; Given a list of strings $$l\times w\times h$$, compute the surface area and
+;; Given a list of strings $l\times w\times h$, compute the surface area and
 ;; volume of the regular cuboids described.
 ;;
 ;; First things first, let's load our input and parse it
@@ -37,7 +37,7 @@
        sort))
 
 ;; ## Calculate area
-;; Apply the formula to calculate the surface area for the cuboid thus $$2\times(lw + lh + wh)$$
+;; Apply the formula to calculate the surface area for the cuboid thus $2\times(lw + lh + wh)$
 (defn calculate-area [present]
   (let [[l w h] (parse-present present)]
     (+ (* 2 l w)
@@ -46,7 +46,7 @@
        (* l w))))
 
 ;; ## Calculate shortest distance
-;; Apply the formula to calculate the shortest distance around the cuboid ($$(2 \times l) \times (2 \times w)$$) plus the volume ($$l \times w \times h$$)
+;; Apply the formula to calculate the shortest distance around the cuboid $(2 \times l) \times (2 \times w)$ plus the volume $l \times w \times h$
 (defn calculate-shortest-distance [present]
   (let [[l w h] (parse-present present)]
     (+ l l w w (* l w h))))
