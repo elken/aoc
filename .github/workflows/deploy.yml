@@ -25,6 +25,7 @@ jobs:
         uses: DeLaGuardo/setup-clojure@master
         with:
           cli: "1.12.0.1488"
+          bb: "1.12.212"
 
       - name: 🏗 Install deps
         run: yarn global add tailwindcss @tailwindcss/typography
@@ -36,16 +37,16 @@ jobs:
             ~/.m2
             ~/.gitlibs
             ~/.deps.clj
-          key: ${{ runner.os }}-aoc-${{ github.sha }}
+            tailwindcss
+          key: ${{ runner.os }}-aoc-${{ hashFiles('deps.edn') }}
           restore-keys: |
-            ${{ runner.os }}-aoc-
+            ${{ runner.os }}-aoc-${{ hashFiles('deps.edn')}}
 
       - name: 🏗 Clerk Build
         env:
           AOC_TOKEN: ${{ secrets.AOC_TOKEN }}
           AOC_USER_AGENT: ${{ secrets.AOC_USER_AGENT }}
-        run: |
-          NODE_PATH=$(yarn global dir)/node_modules clojure -M:nextjournal/clerk
+        run: bb build
 
       - name: 🚀 Deploy
         uses: JamesIves/github-pages-deploy-action@v4.7.2

@@ -6,3 +6,4 @@
 .env
 .clerk/
 /public/
+/tailwindcss

@@ -3,6 +3,33 @@
                     [clojure.string :as str]
                     [clojure.java.io :as io]
                     [babashka.curl :as curl])
+         -os {:task (let [os-name (str/lower-case (System/getProperty "os.name"))]
+                      (cond
+                        (str/includes? os-name "win") "windows"
+                        (str/includes? os-name "mac") "macos"
+                        :else "linux"))}
+         -arch {:task (let [arch (str/lower-case (System/getProperty "os.arch"))]
+                        (cond
+                          (= arch "aarch64") "arm64"
+                          (str/starts-with? arch "arm") "armv7"
+                          :else "x64"))}
+         -download {:task (let [os (run '-os)
+                                arch (run '-arch)
+                                ext (when (= os "windows") ".exe")
+                                filename (str "tailwindcss-" os "-" arch ext)
+                                url (str "https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.17/" filename)
+                                target (str "tailwindcss" ext)]
+                            (when-not (fs/exists? target)
+                              (println "Downloading" url)
+                              (shell "curl" "-sLO" url)
+                              (when (not= os "windows")
+                                (println "Making executable...")
+                                (fs/set-posix-file-permissions filename "rwxr-xr-x"))
+
+                              (println "Renaming file...")
+                              (fs/move filename target {:replace-existing true})
+
+                              (println "Tailwind CSS has been downloaded and set up successfully!")))}
          -input-dir "resources/inputs"
          -load-template {:task (slurp (io/resource "template.clj"))}
          -parse-day-args {:task (let [now (new java.util.Date)
@@ -47,4 +74,5 @@
                                (str/replace (re-pattern "YEAR") year)
                                (str/replace (re-pattern "DAY") day))))}
          serve {:task (clojure "-M:serve")}
-         build {:task (clojure "-M:nextjournal/clerk")}}}
+         build {:task (clojure {:extra-env {"PATH" "."}} "-M:nextjournal/clerk")
+                :depends [-download]}}}
