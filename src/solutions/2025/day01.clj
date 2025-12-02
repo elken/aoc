@@ -24,7 +24,7 @@
 {:nextjournal.clerk/visibility {:code :hide :result :show}}
 
 (clerk/html [:div.border-l-4.border-yellow-500.bg-yellow-50.dark:bg-yellow-900.rounded.p-4.my-4
-             [:p.text-yellow-800.dark:text-yellow-200 (clerk/md "After some thinking, I have come back to this the day after and realized this _is_ a very simple problem after all...
+             [:p.text-yellow-800.dark:text-yellow-200 (clerk/md "After some thinking and inspiration from [Richard Towers](https://github.com/richardTowers/), I have come back to this the day after and realized this _is_ a very simple problem after all...
 
 It just boils down to simple division and counting multiples, sorry Eric!")]])
 
