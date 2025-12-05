@@ -19,7 +19,7 @@
 ;; # Solution
 ;;
 ;; The difficulty curve giveth, the difficulty curve taketh away. At
-;; least an easy day! Sadly, I fell into the trap with this one and
+;; last an easy day! Sadly, I fell into the trap with this one and
 ;; tried to expand the ranges thinking I was really smart, but Eric
 ;; played me for a chump...
 ;;
