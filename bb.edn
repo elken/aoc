@@ -59,6 +59,9 @@
                               template (run '-load-template)
                               path (fs/path "src" "solutions" year)
                               file-name (format "day%s.clj" day)]
+                          (println "Ensuring we have the latest changes...")
+                          (shell "git" "pull")
+                          (shell "git" "submodule" "update")
                           (println (format "Creating template for %s/%s" day year))
 
                           ;; Create the year path if missing
